@@ -1,0 +1,27 @@
+name: Synchroniseer naar DevOps
+
+on:
+  push:
+    branches:
+      - main   # of voeg welke andere branches
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Push naar Azure DevOps Repo
+      run: |
+        git config user.email "github-actions@users.noreply.github.com"
+        git config user.name "GitHub Actions"
+
+        # voeg devops als remote
+        git remote add azure "https://$(AZURE_DEVOPS_PAT)@dev.azure.com/HU-HBO-ICT/2025-Open-ICT-Sep-Project3-Ziyar/_git/2025-Open-ICT-Sep-Project3-Ziyar"
+        
+        # Push veranderingen naar devops
+        git push --force azure HEAD:main  # You can remove '--force' if you don't want to overwrite changes
+      env:
+        AZURE_DEVOPS_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
