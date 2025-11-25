@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <!--Alles wat niet zichtbaar op de site moet staan-->
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,6 +30,42 @@
       <div class="agenda">
         <div class="agendaGrid" id="agendaGrid">
           <!--Hierin komen de agenda dagen te staan. Dit wordt geregeld door javascript en php.-->
+          <template id="agendaDagTemplate">
+            <div class="agendaDag">
+              <div class="agendaTop"> <!--Hier is de dag te staan-->
+                1
+              </div>
+              <div class="agendaInfo"> <!--Hier staat de blokken aan tijd of evenementen-->
+                <div id="timeElement1">
+                  <style>
+                    #timeElement1 {
+                      height: 100%;
+                      width: 100%;
+                      background-color: brown;
+                    }
+                  </style>
+                </div>
+                <div id="timeElement2">
+                  <style>
+                    #timeElement2 {
+                      height: 100%;
+                      width: 100%;
+                      background-color: rgb(159, 42, 165);
+                    }
+                  </style>
+                </div>
+                <div id="timeElement3">
+                  <style>
+                    #timeElement3 {
+                      height: 100%;
+                      width: 100%;
+                      background-color: rgb(155, 165, 42);
+                    }
+                  </style>
+                </div>
+              </div>
+            </div>
+          </template>
         </div>
       </div>
 

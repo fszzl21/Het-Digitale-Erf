@@ -69,4 +69,34 @@ button {
 .agendaDag {
   background-color: rgb(215, 215, 215);
   margin: 1px;
+  position: relative;
+}
+
+.agendaTop {
+  position: absolute;
+  top: 0px;
+  bottom: 80%;
+  right: 0px;
+  left: 0px;
+  text-align: center;
+  text-justify: center;
+  font-size: 20px;
+}
+
+.agendaInfo {
+  position: absolute;
+  top: 20%;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  overflow-y: auto;
+}
+
+#timeElement1 {
+  height: 100%;
+  width: 100%;
+  background-color: brown;
 }

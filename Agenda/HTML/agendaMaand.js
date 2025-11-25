@@ -1,12 +1,8 @@
-/*function elementFromHTML(html) {
-  const template = document.createElement("template")
+for (i = 0; i < 42; i++) {
+  const template = document.getElementById("agendaDagTemplate");
+  const container = document.getElementById("agendaGrid");
 
-  template.innerHTML = html.trim()
-
-  return template.content.firstElementChild;
+  const clone = template.content.cloneNode(true);
+  clone.querySelector(".agendaTop").textContent = i + 1;
+  container.appendChild(clone);
 }
-
-const myList = elementFromHTML("
-  <ul>  <li>dcode</li> </ul>");
-
-document.getElementById("agendaGrid").appendChild(myList);*/
