@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Het Digitale Erf - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <div id="auth-view" class="view active-view auth-layout">
+        <div class="auth-container">
+            <h1 class="logo-auth">Het Digitale Erf</h1>
+            
+            <div id="login-form" class="auth-card active-form">
+                <h2>Welkom Terug</h2>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="login-email">E-mailadres</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="login-password">Wachtwoord</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+
+                    <div class="remember-me-group">
+                        <input type="checkbox" id="remember-me" name="remember-me">
+                        <label for="remember-me">Onthoud mij</label>
+                    </div>
+                    
+                    <button type="button" onclick="handleLoginSubmit()" class="btn-primary auth-btn">Inloggen</button>
+                </form>
+                <p class="toggle-link">Nog geen lid? <a href="#" onclick="toggleForm('register')">Registreer hier</a></p>
+            </div>
+
+            <div id="register-form" class="auth-card hidden-form">
+                <h2>Nieuw op het Erf</h2>
+                <form>
+                    <div class="input-group">
+                        <label for="register-name">Naam</label>
+                        <input type="text" id="register-name" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-email">E-mailadres</label>
+                        <input type="email" id="register-email" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-password">Wachtwoord</label>
+                        <input type="password" id="register-password" required>
+                    </div>
+                    <button type="button" class="btn-primary auth-btn">Registreren</button>
+                </form>
+                <p class="toggle-link">Al een account? <a href="#" onclick="toggleForm('login')">Log hier in</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard-view" class="view dashboard-layout hidden-view">
+        <div class="dashboard-container">
+            <aside class="sidebar">
+                <div class="logo">Het Digitale Erf</div>
+                <nav class="main-nav">
+                    <a href="#" class="nav-item active"><i class="fas fa-home"></i> Dashboard</a>
+                    <a href="#" class="nav-item"><i class="fas fa-calendar-alt"></i> Agenda (Uren)</a>
+                    <a href="#" class="nav-item"><i class="fas fa-tasks"></i> Taken</a>
+                    <a href="#" class="nav-item"><i class="fas fa-bed"></i> Ziekte / Verlof</a>
+                    <a href="#" class="nav-item"><i class="fas fa-folder"></i> Bestanden</a>
+                    <a href="#" class="nav-item"><i class="fas fa-cog"></i> Instellingen</a>
+                </nav>
+            </aside>
+
+            <main class="main-content">
+                <header class="top-header">
+                    <h1>Welkom op het Erf, Bert</h1>
+                    <div class="user-info">
+                        <i class="fas fa-bell"></i>
+                        <span class="username">Bert de Boer</span>
+                        <button onclick="handleLogout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i></button>
+                    </div>
+                </header>
+
+                <section class="dashboard-grid">
+                    <div class="card taken-vandaag">
+                        <h2><i class="fas fa-list-check"></i> Taken Vandaag</h2>
+                        <ul>
+                            <li><span class="taak-titel">Koeien Melken</span> - 06:00</li>
+                            <li><span class="taak-titel">Machines Controleren</span> - 14:00</li>
+                            <li><span class="taak-titel">Mail beantwoorden</span> - 17:00</li>
+                        </ul>
+                    </div>
+                    <div class="card weekoverzicht">
+                        <h2><i class="fas fa-calendar-check"></i> Geplande Uren (Deze Week)</h2>
+                        <p class="uren-summary">Je hebt 40 uur ingepland.</p>
+                        <div class="grafiek-placeholder">[Visualisatie van de uren per dag]</div>
+                    </div>
+                    <div class="card openstaande-taken">
+                        <h2><i class="fas fa-exclamation-triangle"></i> Openstaand</h2>
+                        <p class="teller">7 taken hebben nog geen datum/uur.</p>
+                        <button class="btn-groen">Bekijk Taken</button>
+                    </div>
+                    <div class="card activiteit">
+                        <h2><i class="fas fa-bolt"></i> Recente Activiteit</h2>
+                        <p>Laatste bestand: 'Rapport Oogst 2024.pdf'</p>
+                        <p>Taak voltooid: 'Schuur Vegen' door Piet.</p>
+                    </div>
+                </section>
+                
+                <div class="quick-actions">
+                    <button class="btn-primary"><i class="fas fa-plus"></i> Taak Toevoegen</button>
+                    <button class="btn-secondary"><i class="fas fa-clock"></i> Uur Registreren</button>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <script>
+        // Functie om te schakelen tussen Inloggen en Registreren binnen de AUTH-view
+        function toggleForm(formType) {
+            const login = document.getElementById('login-form');
+            const register = document.getElementById('register-form');
+
+            if (formType === 'register') {
+                login.classList.add('hidden-form');
+                register.classList.remove('hidden-form');
+            } else {
+                login.classList.remove('hidden-form');
+                register.classList.add('hidden-form');
+            }
+        }
+
+       // Functie om in te loggen en over te schakelen naar het dashboard
+        function handleLoginSubmit() {
+            document.getElementById('auth-view').classList.add('hidden-view');
+            document.getElementById('dashboard-view').classList.remove('hidden-view');
+            
+            
+            document.body.style.display = 'block'; 
+        }
+
+        // Functie om uit te loggen en terug te schakelen naar het inlogscherm
+        function handleLogout() {
+            document.getElementById('auth-view').classList.remove('hidden-view');
+            document.getElementById('dashboard-view').classList.add('hidden-view');
+}
+
+    </script>
+</body>

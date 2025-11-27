@@ -1,0 +1,325 @@
+/* --- 0. Algemene Reset en Font --- */
+:root {
+    /* Boeren Thema Kleuren */
+    --kleur-bruin: #04391a;      
+    --kleur-groen: #538D40;          
+    --kleur-oker: #F5F5DC;      
+    --kleur-beige: #F5F5DC;      
+    --kleur-achtergrond: #EAE0C8; 
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Verdana', sans-serif;
+}
+
+body {
+    background-color: var(--kleur-achtergrond);
+    color: #333;
+    /* Standaard Flexbox voor het centreren van de AUTH-VIEW */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* --- VIEW SWITCHING CLASSES --- */
+
+.hidden-view {
+    display: none !important; /* Forceer verbergen */
+}
+
+/* De layout classes bepalen de structuur van de actieve view */
+.auth-layout {
+    width: 100%;
+    /* NIEUW: Deze regels centreren de inhoud van deze specifieke view */
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Zorgt voor verticale centrering */
+}
+
+.dashboard-layout {
+    width: 100%;
+    min-height: 100vh;
+}
+
+
+/* --- AUTHENTICATIE STIJLEN (Inlog/Registratie) --- */
+
+.auth-container {
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+}
+
+.logo-auth {
+    font-size: 2.5em;
+    color: var(--kleur-bruin);
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.auth-card {
+    background-color: var(--kleur-beige);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--kleur-oker);
+}
+
+.auth-card h2 {
+    color: var(--kleur-groen);
+    margin-bottom: 25px;
+    font-size: 1.5em;
+}
+
+.hidden-form {
+    display: none;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--kleur-bruin);
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    background-color: #ffffff;
+}
+
+.auth-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: var(--kleur-groen);
+    color: white;
+    font-size: 1.1em;
+    border-radius: 5px;
+}
+
+.toggle-link {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.toggle-link a {
+    color: var(--kleur-groen);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.toggle-link a:hover {
+    text-decoration: underline;
+}
+
+/* Styling voor de "Onthoud mij" checkbox */
+.remember-me-group {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Links uitlijnen */
+    margin-bottom: 25px;
+}
+
+.remember-me-group input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    /* Thematische aanpassing (optioneel): */
+    accent-color: var(--kleur-groen); 
+}
+
+.remember-me-group label {
+    font-weight: normal; /* Minder zwaar dan veldlabels */
+    color: #666;
+    margin-bottom: 0;
+}
+
+/* Pas de afstand tussen de velden aan, omdat de checkbox nu wat ruimte inneemt */
+.auth-btn {
+    margin-top: 0; /* Haal de extra ruimte van de input-group weg */
+}
+
+/* --- DASHBOARD STIJLEN --- */
+
+/* 1. Dashboard Lay-out (Flexbox/Grid) */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: var(--kleur-bruin);
+    color: var(--kleur-beige);
+    padding: 20px 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 30px;
+}
+
+/* 2. Navigatie (Zijbalk) Stijl */
+.logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--kleur-oker);
+    letter-spacing: 1px;
+}
+
+.nav-item {
+    display: block;
+    padding: 15px 20px;
+    color: var(--kleur-beige);
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-item.active {
+    background-color: var(--kleur-groen);
+    border-left: 5px solid var(--kleur-oker);
+}
+
+.nav-item i {
+    margin-right: 10px;
+}
+
+/* 3. Header Stijl */
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--kleur-bruin);
+    margin-bottom: 30px;
+}
+
+.top-header h1 {
+    color: var(--kleur-bruin);
+    font-size: 1.8em;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info i {
+    font-size: 1.2em;
+    color: var(--kleur-bruin);
+    cursor: pointer;
+}
+
+.btn-logout {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--kleur-bruin);
+    font-size: 1em;
+}
+
+/* 4. Dashboard Grid en Cards */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.card {
+    background-color: var(--kleur-beige);
+    border: 1px solid rgba(107, 68, 35, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.card h2 {
+    color: var(--kleur-groen);
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    border-bottom: 1px dashed var(--kleur-oker);
+    padding-bottom: 5px;
+}
+
+/* Taken Specifieke Stijl */
+.taken-vandaag ul {
+    list-style: none;
+}
+
+.taken-vandaag li {
+    padding: 8px 0;
+    border-bottom: 1px dotted #ccc;
+    display: flex;
+    justify-content: space-between;
+}
+
+.taak-titel {
+    font-weight: bold;
+}
+
+/* 5. Quick-Add Knoppen */
+.quick-actions {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    gap: 15px;
+}
+
+.btn-primary, .btn-secondary, .btn-groen {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--kleur-groen);
+    color: white;
+    box-shadow: 0 4px 6px rgba(83, 141, 64, 0.4);
+}
+
+.btn-secondary {
+    background-color: var(--kleur-oker);
+    color: var(--kleur-bruin);
+}
+
+.btn-groen {
+    background-color: var(--kleur-groen);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
