@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calendar Clone</title>
 
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -14,6 +15,11 @@
   <header>
     <h1>Calendar Clone</h1>
   </header>
+
+<!-- Clock --> 
+  <div class="clock-container">
+    <div id="clock"></div>
+  </div>
 
   <!-- Kalender gedeelte -->
   <div class="calendar">
@@ -67,7 +73,7 @@
       </form>
 
       <!-- Cancel Form -->
-      <button type="button" class="submit-btn"> Anuleer </button>
+      <button type="button" class="submit-btn"> Annuleer </button>
 
     </div>
   </div>
