@@ -84,6 +84,7 @@ header {
 }
 
 /* Mobile (Grid) */
+
 @media (max-width: 1024px) {
     .calendar-grid {
         display: flex;
@@ -271,9 +272,7 @@ header {
     border: 1px solid #CCC;
 }
 
-/* 
- Overlay Button CSS Logic
-*/
+/* Overlay Button CSS Logic */
 
 .day-overlay {
     position: absolute;

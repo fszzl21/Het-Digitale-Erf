@@ -77,9 +77,9 @@ if (isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] === "POST" &
 // Success & Error Messages
 if (isset($_GET["success"])) {
     $successMsg = match ($_GET["success"]) {
-        '1' => "✅ Appointment added successfully",
-        '2' => "✅ Appointment updated successfully",
-        '3' => "🗑️ Appointment deleted successfully",
+        '1' => "Appointment added successfully",
+        '2' => "Appointment updated successfully",
+        '3' => "Appointment deleted successfully",
         default => ''
     };
 }
