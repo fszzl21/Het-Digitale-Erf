@@ -5,6 +5,7 @@ let currentDate = new Date();
 
 // Generate Full Calendar View
 function renderCalendar(date = new Date()) {
+  // Clear the calendar
   calendarEl.innerHTML = "";
 
   const year = date.getFullYear();
@@ -31,7 +32,9 @@ function renderCalendar(date = new Date()) {
     calendarEl.appendChild(document.createElement("div"));
   }
 
+  // Creating the days
   for (let day = 1; day <= totalDays; day++) {
+    let eventSwitch = false
     const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
     const cell = document.createElement("div");
@@ -58,22 +61,26 @@ function renderCalendar(date = new Date()) {
       const ev = document.createElement("div");
       ev.className = "event";
 
-      const appointmentEl = document.createElement("div");
-      appointmentEl.className = "appointment";
-      appointmentEl.textContent = event.title.split(" - ")[0];
+      // If more than 2 events same day, "more events" event shows
+      if (eventsToday.length > 1) {
+        if (eventSwitch == false) {
+        const tooManyEl = document.createElement("div");
+        tooManyEl.className = "too-many-event";
+        tooManyEl.textContent = "Nog " + eventsToday.length;
 
-      const themeEl = document.createElement("div");
-      themeEl.className = "theme";
-      themeEl.textContent = event.title.split(" - ")[1];
+        ev.appendChild(tooManyEl);
+        eventBox.appendChild(ev);
+        eventSwitch = true
+        }
+      } else {
 
-      const timeEl = document.createElement("div");
-      timeEl.className = "time";
-      timeEl.textContent = `${event.start_time} - ${event.end_time}`;
+        const appointmentEl = document.createElement("div");
+        appointmentEl.className = "appointment";
+        appointmentEl.textContent = event.title.split(" - ")[0];
 
-      ev.appendChild(appointmentEl);
-      ev.appendChild(themeEl);
-      ev.appendChild(timeEl);
-      eventBox.appendChild(ev);
+        ev.appendChild(appointmentEl);
+        eventBox.appendChild(ev);
+      }
     });
 
     // Overlay Buttons
@@ -182,18 +189,5 @@ function changeMonth(offset) {
   renderCalendar(currentDate);
 }
 
-// Update the Clock
-function updateClock() {
-  const now = new Date();
-  const clock = document.getElementById("clock");
-  clock.textContent = [
-    now.getHours().toString().padStart(2, "0"),
-    now.getMinutes().toString().padStart(2, "0"),
-    now.getSeconds().toString().padStart(2, "0"),
-  ].join(":");
-}
-
 // Run on Page Load
 renderCalendar(currentDate);
-updateClock();
-setInterval(updateClock, 1000);

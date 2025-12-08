@@ -26,8 +26,6 @@ include "calendar.php";
     <div class="alert error"><?= $errorMsg ?></div>
   <?php endif; ?>
 
-  <!-- Clock -->
-
   <!-- Calendar -->
   <div class="calendar">
     <div class="nav-btn-container">
@@ -45,9 +43,9 @@ include "calendar.php";
 
       <!-- Dropdown Selector -->
       <div id="eventSelectorWrapper" style="display: none;">
-        <label for="eventSelector"><strong>Select Event:</strong></label>
+        <label for="eventSelector"><strong>Kies Afspraak:</strong></label>
         <select id="eventSelector" onchange="handleEventSelection(this.value)">
-          <option disabled selected>Choose Event...</option>
+          <option disabled selected>Kies Afspraak...</option>
         </select>
       </div>
 
@@ -89,12 +87,7 @@ include "calendar.php";
     </div>
   </div>
 
-  <!-- Events JSON from PHP -->
-
-
   <!-- Calendar Logic -->
-
-
   <script>
     const events = <?= json_encode($eventsFromDB, JSON_UNESCAPED_UNICODE); ?>;
   </script>
