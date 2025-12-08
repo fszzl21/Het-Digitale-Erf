@@ -14,12 +14,12 @@ function renderCalendar(date = new Date()) {
   const totalDays = new Date(year, month + 1, 0).getDate();
   const firstDayOfMonth = new Date(year, month, 1).getDay();
 
-  monthYearEl.textContent = date.toLocaleDateString("en-US", {
+  monthYearEl.textContent = date.toLocaleDateString("nl-NL", {
     month: "long",
     year: "numeric",
   });
 
-  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const weekDays = ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"];
   weekDays.forEach((day) => {
     const dayEl = document.createElement("div");
     dayEl.className = "day-name";
@@ -58,20 +58,20 @@ function renderCalendar(date = new Date()) {
       const ev = document.createElement("div");
       ev.className = "event";
 
-      const courseEl = document.createElement("div");
-      courseEl.className = "course";
-      courseEl.textContent = event.title.split(" - ")[0];
+      const appointmentEl = document.createElement("div");
+      appointmentEl.className = "appointment";
+      appointmentEl.textContent = event.title.split(" - ")[0];
 
-      const instructorEl = document.createElement("div");
-      instructorEl.className = "instructor";
-      instructorEl.textContent = "🧑🏻‍🏫 " + event.title.split(" - ")[1];
+      const themeEl = document.createElement("div");
+      themeEl.className = "theme";
+      themeEl.textContent = event.title.split(" - ")[1];
 
       const timeEl = document.createElement("div");
       timeEl.className = "time";
-      timeEl.textContent = `⏰ ${event.start_time} - ${event.end_time}`;
+      timeEl.textContent = `${event.start_time} - ${event.end_time}`;
 
-      ev.appendChild(courseEl);
-      ev.appendChild(instructorEl);
+      ev.appendChild(appointmentEl);
+      ev.appendChild(themeEl);
       ev.appendChild(timeEl);
       eventBox.appendChild(ev);
     });
@@ -82,7 +82,7 @@ function renderCalendar(date = new Date()) {
 
     const addBtn = document.createElement("button");
     addBtn.className = "overlay-btn";
-    addBtn.textContent = "+ Add";
+    addBtn.textContent = "Voeg toe";
     addBtn.onclick = (e) => {
       e.stopPropagation();
       openModalForAdd(dateStr);
@@ -92,7 +92,7 @@ function renderCalendar(date = new Date()) {
     if (eventsToday.length > 0) {
       const editBtn = document.createElement("button");
       editBtn.className = "overlay-btn";
-      editBtn.textContent = "✏️ Edit";
+      editBtn.textContent = "Pas aan";
       editBtn.onclick = (e) => {
         e.stopPropagation();
         openModalForEdit(eventsToday);
@@ -111,8 +111,8 @@ function openModalForAdd(dateStr) {
   document.getElementById("formAction").value = "add";
   document.getElementById("eventId").value = "";
   document.getElementById("deleteEventId").value = "";
-  document.getElementById("courseName").value = "";
-  document.getElementById("instructorName").value = "";
+  document.getElementById("appointmentName").value = "";
+  document.getElementById("appointmentTheme").value = "";
   document.getElementById("startDate").value = dateStr;
   document.getElementById("endDate").value = dateStr;
   document.getElementById("startTime").value = "09:00";
@@ -136,12 +136,12 @@ function openModalForEdit(eventsOnDate) {
   const selector = document.getElementById("eventSelector");
   const wrapper = document.getElementById("eventSelectorWrapper");
 
-  selector.innerHTML = "<option disabled selected>Choose event...</option>";
+  selector.innerHTML = "<option disabled selected>Kies afspraak...</option>";
 
   eventsOnDate.forEach((e) => {
     const option = document.createElement("option");
     option.value = JSON.stringify(e);
-    option.textContent = `${e.title} (${e.start} ➡️ ${e.end})`;
+    option.textContent = `${e.title} (${e.start} -> ${e.end})`;
     selector.appendChild(option);
   });
 
@@ -161,10 +161,10 @@ function handleEventSelection(eventJSON) {
   document.getElementById("eventId").value = event.id;
   document.getElementById("deleteEventId").value = event.id;
 
-  const [course, instructor] = event.title.split(" - ").map((e) => e.trim());
+  const [appointment, theme] = event.title.split(" - ").map((e) => e.trim());
 
-  document.getElementById("courseName").value = course || "";
-  document.getElementById("instructorName").value = instructor || "";
+  document.getElementById("appointmentName").value = appointment || "";
+  document.getElementById("appointmentTheme").value = theme || "";
   document.getElementById("startDate").value = event.start || "";
   document.getElementById("endDate").value = event.end || "";
   document.getElementById("startTime").value = event.start_time || "";

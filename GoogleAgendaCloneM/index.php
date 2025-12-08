@@ -1,4 +1,3 @@
-
 <?php
 
 include "calendar.php";
@@ -20,10 +19,6 @@ include "calendar.php";
 
 <body>
 
-  <header>
-    <h1> Course Calendar<br> My Calendar Project</h1>
-  </header>
-
   <!-- Success / Error Messages -->
   <?php if ($successMsg): ?>
     <div class="alert success"><?= $successMsg ?></div>
@@ -32,9 +27,6 @@ include "calendar.php";
   <?php endif; ?>
 
   <!-- Clock -->
-  <div class="clock-container">
-    <div id="clock"></div>
-  </div>
 
   <!-- Calendar -->
   <div class="calendar">
@@ -64,36 +56,36 @@ include "calendar.php";
         <input type="hidden" name="action" id="formAction" value="add">
         <input type="hidden" name="event_id" id="eventId">
 
-        <label for="courseName">Course Title:</label>
-        <input type="text" name="course_name" id="courseName" required>
+        <label for="appointmentName">Afspraak Naam:</label>
+        <input type="text" name="appointment_name" id="appointmentName" required>
 
-        <label for="instructorName">Instructor Name:</label>
-        <input type="text" name="instructor_name" id="instructorName" required>
+        <label for="appointmentTheme">Onderwerp:</label>
+        <input type="text" name="appointment_theme" id="appointmentTheme" required>
 
-        <label for="startDate">Start Date:</label>
+        <label for="startDate">Start Datum:</label>
         <input type="date" name="start_date" id="startDate" required>
 
-        <label for="endDate">End Date:</label>
+        <label for="endDate">Eind Datum:</label>
         <input type="date" name="end_date" id="endDate" required>
 
-        <label for="startTime">Start Time:</label>
+        <label for="startTime">Start Tijd:</label>
         <input type="time" name="start_time" id="startTime" required>
 
-        <label for="endTime">End Time:</label>
+        <label for="endTime">End Tijd:</label>
         <input type="time" name="end_time" id="endTime" required>
 
-        <button type="submit">💾 Save</button>
+        <button type="submit">Opslaan</button>
       </form>
 
       <!-- Delete -->
       <form method="POST" onsubmit="return confirm('Are you sure you want to delete this appointment?')">
         <input type="hidden" name="action" value="delete">
         <input type="hidden" name="event_id" id="deleteEventId">
-        <button type="submit" class="submit-btn">🗑️ Delete</button>
+        <button type="submit" class="submit-btn">Verwijder</button>
       </form>
 
       <!-- Cancel -->
-      <button type="button" class="submit-btn" onclick="closeModal()" style="background:#ccc">❌ Cancel</button>
+      <button type="button" class="submit-btn" onclick="closeModal()" style="background:#ccc">Annuleer</button>
     </div>
   </div>
 
