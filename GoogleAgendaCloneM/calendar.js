@@ -1,6 +1,8 @@
 const calendarEl = document.getElementById("calendar");
 const monthYearEl = document.getElementById("monthYear");
 const modalEl = document.getElementById("eventModal");
+const TMEmodal = document.getElementById("TMEmodal")
+const TMEel = document.getElementById("TMEContainer");
 let currentDate = new Date();
 
 // Generate Full Calendar View
@@ -60,17 +62,18 @@ function renderCalendar(date = new Date()) {
     eventsToday.forEach((event) => {
       const ev = document.createElement("div");
       ev.className = "event";
+      
 
       // If more than 2 events same day, "more events" event shows
       if (eventsToday.length > 1) {
         if (eventSwitch == false) {
-        const tooManyEl = document.createElement("div");
-        tooManyEl.className = "too-many-event";
-        tooManyEl.textContent = "Nog " + eventsToday.length;
+          const tooManyEl = document.createElement("div");
+          tooManyEl.className = "too-many-event";
+          tooManyEl.textContent = "Nog " + eventsToday.length;
 
-        ev.appendChild(tooManyEl);
-        eventBox.appendChild(ev);
-        eventSwitch = true
+          ev.appendChild(tooManyEl);
+          eventBox.appendChild(ev);
+          eventSwitch = true
         }
       } else {
 
@@ -82,6 +85,22 @@ function renderCalendar(date = new Date()) {
         eventBox.appendChild(ev);
       }
     });
+
+    // Display events on TME modal
+    function renderEventsTME(eventsToday) {
+      TMEel.innerHTML = "";
+
+      eventsToday.forEach((event) => {
+        const ev = document.createElement("div");
+        ev.className = "event";
+        const appointmentEl = document.createElement("div");
+        appointmentEl.className = "appointment";
+        appointmentEl.textContent = event.title.split(" - ")[0];
+
+        ev.appendChild(appointmentEl);
+        TMEel.appendChild(ev);
+      })
+    };
 
     // Overlay Buttons
     const overlay = document.createElement("div");
@@ -181,6 +200,11 @@ function handleEventSelection(eventJSON) {
 // Close the Modal
 function closeModal() {
   modalEl.style.display = "none";
+}
+
+// Close the TMEmodal
+function closeTME() {
+TMEmodal.style.display = "none";
 }
 
 // Navigate Between Months

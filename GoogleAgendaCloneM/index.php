@@ -37,6 +37,17 @@ include "calendar.php";
     <div class="calendar-grid" id="calendar"></div>
   </div>
 
+  <!-- Too Many Events popup -->
+  <div class=TMEModal id="TMEmodal">
+    <div class="TME">
+      <button class=TMEClose onclick="closeTME()"></button>
+      <div class=TMEContainer id="TMEContainer">
+
+      </div>
+    </div>
+  </div>
+
+
   <!-- Modal -->
   <div class="modal" id="eventModal">
     <div class="modal-content">
