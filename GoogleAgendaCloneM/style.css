@@ -135,12 +135,16 @@ body {
 }
 
 .too-many-event {
-    color: rgb(255, 255, 255);
-    margin-top: 6px;
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
+    padding: 6px 8px;
+    border: none;
+
+    cursor: pointer;
+    
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
     overflow-x: clip;
 }
 
@@ -258,7 +262,7 @@ body {
     inset: 0px;
     justify-content: center;
     align-items: center;
-    display: flex;
+    display: none;
     position: fixed;
 }
 
@@ -296,6 +300,7 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    overflow-y: auto;
 }
 
 /* DropDown for multiple events */

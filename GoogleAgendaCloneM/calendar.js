@@ -1,9 +1,10 @@
 const calendarEl = document.getElementById("calendar");
 const monthYearEl = document.getElementById("monthYear");
 const modalEl = document.getElementById("eventModal");
-const TMEmodal = document.getElementById("TMEmodal")
+const TMEmodal = document.getElementById("TMEmodal") // TME stands for TooManyEvents
 const TMEel = document.getElementById("TMEContainer");
 let currentDate = new Date();
+
 
 // Generate Full Calendar View
 function renderCalendar(date = new Date()) {
@@ -62,17 +63,23 @@ function renderCalendar(date = new Date()) {
     eventsToday.forEach((event) => {
       const ev = document.createElement("div");
       ev.className = "event";
-      
+
 
       // If more than 2 events same day, "more events" event shows
       if (eventsToday.length > 1) {
         if (eventSwitch == false) {
-          const tooManyEl = document.createElement("div");
+          const tooManyEl = document.createElement("button");
           tooManyEl.className = "too-many-event";
           tooManyEl.textContent = "Nog " + eventsToday.length;
 
           ev.appendChild(tooManyEl);
           eventBox.appendChild(ev);
+
+          ev.addEventListener("click", () => {
+            renderEventsTME();
+            console.log("test~!")
+          })
+
           eventSwitch = true
         }
       } else {
@@ -86,9 +93,10 @@ function renderCalendar(date = new Date()) {
       }
     });
 
-    // Display events on TME modal
-    function renderEventsTME(eventsToday) {
+    // Display events on TME modal (TooManyEvents)
+    function renderEventsTME() {
       TMEel.innerHTML = "";
+      let eventsToday = events.filter((e) => e.date === dateStr);
 
       eventsToday.forEach((event) => {
         const ev = document.createElement("div");
@@ -99,6 +107,7 @@ function renderCalendar(date = new Date()) {
 
         ev.appendChild(appointmentEl);
         TMEel.appendChild(ev);
+        TMEmodal.style.display = "flex";
       })
     };
 
@@ -204,7 +213,7 @@ function closeModal() {
 
 // Close the TMEmodal
 function closeTME() {
-TMEmodal.style.display = "none";
+  TMEmodal.style.display = "none";
 }
 
 // Navigate Between Months
