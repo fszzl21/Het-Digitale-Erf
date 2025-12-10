@@ -38,7 +38,7 @@ include "calendar.php";
   </div>
 
   <!-- Too Many Events popup -->
-  <div class=TMEModal id="TMEmodal">
+  <div class=TMEModal onclick="closeTME()" id="TMEmodal">
     <div class="TME">
       <button class=TMEClose onclick="closeTME()"></button>
       <div class=TMEContainer id="TMEContainer">

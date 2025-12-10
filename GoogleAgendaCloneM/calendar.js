@@ -64,7 +64,6 @@ function renderCalendar(date = new Date()) {
       const ev = document.createElement("div");
       ev.className = "event";
 
-
       // If more than 2 events same day, "more events" event shows
       if (eventsToday.length > 1) {
         if (eventSwitch == false) {
@@ -90,6 +89,11 @@ function renderCalendar(date = new Date()) {
 
         ev.appendChild(appointmentEl);
         eventBox.appendChild(ev);
+
+        ev.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openModalForEdit(eventsToday);
+      });
       }
     });
 
@@ -108,6 +112,11 @@ function renderCalendar(date = new Date()) {
         ev.appendChild(appointmentEl);
         TMEel.appendChild(ev);
         TMEmodal.style.display = "flex";
+
+        ev.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openModalForEdit(eventsToday); // OPEN WITH RIGHT EVENT, MAYBE FIND WAY TO INDENTIFY EVENT TO PARSE CORRECT EVENT.
+      });
       })
     };
 
