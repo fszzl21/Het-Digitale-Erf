@@ -141,7 +141,7 @@ body {
     border: none;
 
     cursor: pointer;
-    
+
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -345,3 +345,115 @@ body {
 .overlay-btn:hover {
     background: var(--primary);
 }
+
+/* Mini navigation menu */
+
+.miniNav {
+    position: fixed;
+    bottom: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 15vh;
+
+    left: 25%;
+    right: 25%;
+
+    z-index: 100;
+}
+
+
+.miniNavContainer {
+    background-color: #3A553E;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+
+    border-radius: 30px;
+    z-index: 101;
+}
+
+.miniNavColorFiller {
+    position: fixed;
+    bottom: 0px;
+    height: 8vh;
+
+    left: 25%;
+    right: 25%;
+    background-color: #3A553E;
+}
+
+.miniNavUpperContainer {
+    flex: 2;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.miniNavLowerContainer {
+    flex: 3;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0px 10%;
+}
+
+.generalAddAppointment {
+    width: 45%;
+    height: 70%;
+    background-color: white;
+    border: none;
+    border-radius: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+
+    transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.generalAddAppointment:hover {
+    transform: scale(1.05);
+    background-color: rgb(211, 211, 211);
+}
+
+.miniNavArrow {
+    rotate: 180deg;
+    object-fit: contain;
+    height: 35px;
+    width: 35px;
+}
+
+.miniNavView {
+    height: 80%;
+    width: 25%;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: white;
+
+    cursor: pointer;
+
+    transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.miniNavView:hover {
+transform: scale(1.05);
+background-color: rgb(211, 211, 211);
+}
+
+
+#miniNavMaand {}
+
+#miniNavWeek {}
+
+#miniNavDag {}

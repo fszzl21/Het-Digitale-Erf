@@ -19,13 +19,6 @@ include "calendar.php";
 
 <body>
 
-  <!-- Success / Error Messages -->
-  <?php if ($successMsg): ?>
-    <div class="alert success"><?= $successMsg ?></div>
-  <?php elseif ($errorMsg): ?>
-    <div class="alert error"><?= $errorMsg ?></div>
-  <?php endif; ?>
-
   <!-- Calendar -->
   <div class="calendar">
     <div class="nav-btn-container">
@@ -104,6 +97,25 @@ include "calendar.php";
   </script>
 
   <script src="calendar.js"></script>
+
+  <!-- Mini navigation menu -->
+  <div class="miniNavColorFiller"></div>
+
+  <div class="miniNav">
+    <div class="miniNavContainer">
+      <div class="miniNavUpperContainer">
+        <img src="Images/Icons/unfold-icon.jpg" class="miniNavArrow"></img>
+        <button class="generalAddAppointment" id="generalAddAppointment">+ Voeg afspraak toe.</button>
+        <img src="Images/Icons/unfold-icon.jpg" class="miniNavArrow"></img>
+      </div>
+
+      <div class="miniNavLowerContainer">
+        <button class="miniNavView" id="miniNavMaand">Maandoverzicht</button>
+        <button class="miniNavView" id="miniNavWeek">Weekoverzicht</button>
+        <button class="miniNavView" id="miniNavDag">Dagoverzicht</button>
+      </div>
+    </div>
+  </div>
 
 </body>
 

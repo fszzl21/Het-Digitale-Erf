@@ -140,17 +140,6 @@ function renderCalendar(date = new Date()) {
     };
     overlay.appendChild(addBtn);
 
-    if (eventsToday.length > 0) {
-      const editBtn = document.createElement("button");
-      editBtn.className = "overlay-btn";
-      editBtn.textContent = "Pas aan";
-      editBtn.onclick = (e) => {
-        e.stopPropagation();
-        openModalForEdit(eventsToday);
-      };
-      overlay.appendChild(editBtn);
-    }
-
     cell.appendChild(overlay);
     cell.appendChild(eventBox);
     calendarEl.appendChild(cell);
