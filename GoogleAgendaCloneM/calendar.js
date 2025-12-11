@@ -102,6 +102,7 @@ function renderCalendar(date = new Date()) {
       TMEel.innerHTML = "";
       let eventsToday = events.filter((e) => e.date === dateStr);
 
+      // Create events/appointments
       eventsToday.forEach((event) => {
         const ev = document.createElement("div");
         ev.className = "event";
@@ -109,13 +110,19 @@ function renderCalendar(date = new Date()) {
         appointmentEl.className = "appointment";
         appointmentEl.textContent = event.title.split(" - ")[0];
 
+        // Append appointment to event and display it
         ev.appendChild(appointmentEl);
         TMEel.appendChild(ev);
         TMEmodal.style.display = "flex";
 
+        // Connect click method with TMEModal function.
         ev.addEventListener("click", (e) => {
         e.stopPropagation();
-        openModalForEdit(eventsToday); // OPEN WITH RIGHT EVENT, MAYBE FIND WAY TO INDENTIFY EVENT TO PARSE CORRECT EVENT.
+        eventsToday.forEach((event) => {
+          if (event.title.split(" - ")[0] == ev.textContent) {
+            openModalTMEForEdit(eventsToday, event);
+          }
+        });
       });
       })
     };
@@ -197,6 +204,31 @@ function openModalForEdit(eventsOnDate) {
 
   handleEventSelection(JSON.stringify(eventsOnDate[0]));
 }
+
+// Edit Event TME Modal (Copy of above but changed so it can display info on TME extra modal event info popup)
+function openModalTMEForEdit(eventsOnDate, event) {
+  document.getElementById("formAction").value = "edit";
+  modalEl.style.display = "flex";
+
+  const selector = document.getElementById("eventSelector");
+  const wrapper = document.getElementById("eventSelectorWrapper");
+
+  selector.innerHTML = "<option disabled selected>Kies uit...</option>";
+
+  eventsOnDate.forEach((e) => {
+    const option = document.createElement("option");
+    option.value = JSON.stringify(e);
+    option.textContent = `${e.title} (${e.start} -> ${e.end})`;
+    selector.appendChild(option);
+  });
+
+  if (eventsOnDate.length > 1) {
+    wrapper.style.display = "block";
+  } else {
+    wrapper.style.display = "none";
+  }
+
+  handleEventSelection(JSON.stringify(event))};
 
 //  Autofill the Form
 function handleEventSelection(eventJSON) {
