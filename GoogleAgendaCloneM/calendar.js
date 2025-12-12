@@ -4,6 +4,8 @@ const modalEl = document.getElementById("eventModal");
 const TMEmodal = document.getElementById("TMEmodal") // TME stands for TooManyEvents
 const TMEel = document.getElementById("TMEContainer");
 let currentDate = new Date();
+let Visibility = true;
+let miniNavTimeout;
 
 
 // Generate Full Calendar View
@@ -56,6 +58,12 @@ function renderCalendar(date = new Date()) {
     dateEl.textContent = day;
     cell.appendChild(dateEl);
 
+    // When day div is clicked, will open new event modal
+    cell.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openModalForAdd(dateStr);
+    })
+
     const eventsToday = events.filter((e) => e.date === dateStr);
     const eventBox = document.createElement("div");
     eventBox.className = "events";
@@ -74,7 +82,8 @@ function renderCalendar(date = new Date()) {
           ev.appendChild(tooManyEl);
           eventBox.appendChild(ev);
 
-          ev.addEventListener("click", () => {
+          ev.addEventListener("click", (e) => {
+            e.stopPropagation();
             renderEventsTME();
             console.log("test~!")
           })
@@ -91,9 +100,9 @@ function renderCalendar(date = new Date()) {
         eventBox.appendChild(ev);
 
         ev.addEventListener("click", (e) => {
-        e.stopPropagation();
-        openModalForEdit(eventsToday);
-      });
+          e.stopPropagation();
+          openModalForEdit(eventsToday);
+        });
       }
     });
 
@@ -117,33 +126,23 @@ function renderCalendar(date = new Date()) {
 
         // Connect click method with TMEModal function.
         ev.addEventListener("click", (e) => {
-        e.stopPropagation();
-        eventsToday.forEach((event) => {
-          if (event.title.split(" - ")[0] == ev.textContent) {
-            openModalTMEForEdit(eventsToday, event);
-          }
+          e.stopPropagation();
+          eventsToday.forEach((event) => {
+            if (event.title.split(" - ")[0] == ev.textContent) {
+              openModalTMEForEdit(eventsToday, event);
+            }
+          });
         });
-      });
       })
     };
-
-    // Overlay Buttons
-    const overlay = document.createElement("div");
-    overlay.className = "day-overlay";
-
-    const addBtn = document.createElement("button");
-    addBtn.className = "overlay-btn";
-    addBtn.textContent = "Voeg toe";
-    addBtn.onclick = (e) => {
-      e.stopPropagation();
-      openModalForAdd(dateStr);
-    };
-    overlay.appendChild(addBtn);
-
-    cell.appendChild(overlay);
     cell.appendChild(eventBox);
     calendarEl.appendChild(cell);
   }
+}
+
+function AddGeneralAppointment(e) {
+  e.stopPropagation();
+  openModalForAdd();
 }
 
 // Add Event Modal
@@ -217,7 +216,8 @@ function openModalTMEForEdit(eventsOnDate, event) {
     wrapper.style.display = "none";
   }
 
-  handleEventSelection(JSON.stringify(event))};
+  handleEventSelection(JSON.stringify(event))
+};
 
 //  Autofill the Form
 function handleEventSelection(eventJSON) {
@@ -236,6 +236,14 @@ function handleEventSelection(eventJSON) {
   document.getElementById("endTime").value = event.end_time || "";
 }
 
+// Add New Appointment
+function newAppointment() {
+  addBtn.onclick = (e) => {
+    e.stopPropagation();
+    openModalForAdd(dateStr);
+  };
+}
+
 // Close the Modal
 function closeModal() {
   modalEl.style.display = "none";
@@ -244,6 +252,49 @@ function closeModal() {
 // Close the TMEmodal
 function closeTME() {
   TMEmodal.style.display = "none";
+}
+
+// Open miniNavMenu
+function openMiniNav() {
+  clearTimeout(miniNavTimeout);
+  const miniNav = document.getElementById("miniNav");
+  const miniNavArrow1 = document.getElementById("miniNavArrow1");
+  const miniNavArrow2 = document.getElementById("miniNavArrow2");
+
+  miniNav.style.transform = "translate(0, 0%)";
+  const miniNavColor = document.getElementById("miniNavColor");
+  miniNavColor.style.left = "0";
+  miniNavColor.style.right = "0";
+
+  miniNavArrow1.style.transform = "rotate(-180deg)";
+  miniNavArrow2.style.transform = "rotate(180deg)";
+  
+  Visibility = true;
+}
+
+// Close miniNavMenu
+function closeMiniNav() {
+  clearTimeout(miniNavTimeout);
+  miniNavTimeout = setTimeout(() => {
+    const miniNav = document.getElementById("miniNav");
+    const miniNavArrow1 = document.getElementById("miniNavArrow1");
+    const miniNavArrow2 = document.getElementById("miniNavArrow2");
+
+    miniNav.style.transform = "translate(0, 60%)";
+    miniNavArrow1.style.transform = "rotate(0deg)";
+    miniNavArrow2.style.transform = "rotate(0deg)";
+    
+    Visibility = false;
+  }, 50);
+}
+
+// Update MiniNavigationModalVisibility om Visibility state correct te zetten
+function MiniNavigationModalVisibility() {
+  if (Visibility === false) {
+    openMiniNav();
+  } else {
+    closeMiniNav();
+  }
 }
 
 // Navigate Between Months

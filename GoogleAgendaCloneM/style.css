@@ -103,7 +103,7 @@ body {
 }
 
 .day:hover {
-    background: #f3f4f6;
+    background: #e0e1e4;
 }
 
 .day.today {
@@ -350,7 +350,7 @@ body {
 
 .miniNav {
     position: fixed;
-    bottom: 0px;
+    bottom: 0%;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -361,6 +361,10 @@ body {
     right: 25%;
 
     z-index: 100;
+
+    transition: transform 0.2s ease;
+
+    transform: translate(0, 60%);
 }
 
 
@@ -424,11 +428,22 @@ body {
     background-color: rgb(211, 211, 211);
 }
 
-.miniNavArrow {
+#miniNavArrow1 {
     rotate: 180deg;
     object-fit: contain;
     height: 35px;
     width: 35px;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+
+#miniNavArrow2 {
+    rotate: 180deg;
+    object-fit: contain;
+    height: 35px;
+    width: 35px;
+    transition: transform 0.2s ease;
+    cursor: pointer;
 }
 
 .miniNavView {

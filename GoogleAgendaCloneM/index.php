@@ -99,14 +99,17 @@ include "calendar.php";
   <script src="calendar.js"></script>
 
   <!-- Mini navigation menu -->
-  <div class="miniNavColorFiller"></div>
 
-  <div class="miniNav">
+
+  <div class="miniNav" id="miniNav"
+    onmouseenter="openMiniNav()"
+    onmouseleave="closeMiniNav()">
+    <div class="miniNavColorFiller" id="miniNavColor"></div>
     <div class="miniNavContainer">
       <div class="miniNavUpperContainer">
-        <img src="Images/Icons/unfold-icon.jpg" class="miniNavArrow"></img>
-        <button class="generalAddAppointment" id="generalAddAppointment">+ Voeg afspraak toe.</button>
-        <img src="Images/Icons/unfold-icon.jpg" class="miniNavArrow"></img>
+        <img src="Images/Icons/unfold-icon.jpg" id="miniNavArrow1" class="miniNavArrow" onclick="setTimeout(MiniNavigationModalVisibility, 100, this)"></img>
+        <button class="generalAddAppointment" id="generalAddAppointment" onclick="AddGeneralAppointment(event)">+ Voeg afspraak toe.</button>
+        <img src="Images/Icons/unfold-icon.jpg" id="miniNavArrow2" class="miniNavArrow" onclick="setTimeout(MiniNavigationModalVisibility, 100, this)"></img>
       </div>
 
       <div class="miniNavLowerContainer">
