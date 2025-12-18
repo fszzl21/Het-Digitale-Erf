@@ -22,9 +22,9 @@ include "calendar.php";
   <!-- Calendar -->
   <div class="calendar">
     <div class="nav-btn-container">
-      <button onclick="changeMonth(-1)" class="nav-btn">⏮️</button>
+      <button onclick="changeMonth(-1)" class="nav-btn"><=</button>
       <h2 id="monthYear" style="margin: 0"></h2>
-      <button onclick="changeMonth(1)" class="nav-btn">⏭️</button>
+      <button onclick="changeMonth(1)" class="nav-btn">=></button>
     </div>
 
     <div class="calendar-grid" id="calendar"></div>
@@ -113,9 +113,9 @@ include "calendar.php";
       </div>
 
       <div class="miniNavLowerContainer">
-        <button class="miniNavView" id="miniNavMaand">Maandoverzicht</button>
-        <button class="miniNavView" id="miniNavWeek">Weekoverzicht</button>
-        <button class="miniNavView" id="miniNavDag">Dagoverzicht</button>
+        <button class="miniNavView" id="miniNavMaand" onclick="switchCalendarView('month')">Maandoverzicht</button>
+        <button class="miniNavView" id="miniNavWeek" onclick="switchCalendarView('week')">Weekoverzicht</button>
+        <button class="miniNavView" id="miniNavDag" onclick="switchCalendarView('day')">Dagoverzicht</button>
       </div>
     </div>
   </div>

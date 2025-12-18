@@ -7,11 +7,35 @@ let currentDate = new Date();
 let Visibility = true;
 let miniNavTimeout;
 
+let currentCalendarView = "week"; // Possible values: "month", "week", "day"
 
-// Generate Full Calendar View
-function renderCalendar(date = new Date()) {
+function renderCalendar() {
+  if (currentCalendarView === "month") {
+    renderMonthCalendar(currentDate);
+  } else if (currentCalendarView === "week") {
+    renderWeekCalendar(currentDate);
+  } else if (currentCalendarView === "day") {
+    // Function to render day view
+  }
+}
+
+// Switch to different calendar view
+function switchCalendarView(viewType) {
+  currentCalendarView = viewType;
+  renderCalendar();
+}
+
+// Generate Month Calendar View
+function renderMonthCalendar(date = new Date()) {
   // Clear the calendar
   calendarEl.innerHTML = "";
+
+  calendarEl.style.display = "grid";
+  calendarEl.style.gridTemplateColumns = "repeat(7, minmax(0, 1fr))";
+  calendarEl.style.height = "100%";
+  calendarEl.style.gridAutoRows = "1fr";
+  calendarEl.style.gap = "10px";
+
 
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -137,6 +161,107 @@ function renderCalendar(date = new Date()) {
     };
     cell.appendChild(eventBox);
     calendarEl.appendChild(cell);
+  }
+}
+
+function getEventPosition(startTime, endTime, dayStartHour = 0, dayEndHour = 24) {
+  // This will split the time strings and convert them to variables 
+  const [startHour, startMin] = startTime.split(':').map(Number);
+  const [endHour, endMin] = endTime.split(':').map(Number);
+
+  const dayTotalHours = dayEndHour - dayStartHour;
+
+  const offSetHeight = (16 / calendarEl.clientHeight) * 100;
+
+  // Convert time to minutes from day start
+  const startMinutes = (startHour - dayStartHour) * 60 + startMin;
+  const endMinutes = (endHour - dayStartHour) * 60 + endMin;
+
+  // Calculate percentages (0-100%)
+  const topPercent = ((startMinutes / (dayTotalHours * 60)) * 100) ;
+  const heightPercent = ((endMinutes - startMinutes) / (dayTotalHours * 60)) * 100;
+
+  return {
+    top: `${topPercent}%`,
+    height: `${heightPercent}%`
+  };
+}
+
+// Generate Week Calendar View
+function renderWeekCalendar(date = new Date()) {
+  calendarEl.innerHTML = "";
+
+  calendarEl.style.display = "flex";
+  calendarEl.style.flexDirection = "row";
+  calendarEl.style.height = "100%";
+  calendarEl.style.gap = "10px";
+  calendarEl.style.position = "relative";
+
+  const timeUnitColumnEl = document.createElement("div");
+  timeUnitColumnEl.className = "time-unit-column";
+  calendarEl.appendChild(timeUnitColumnEl);
+
+  // This will make the time units on the left side
+  for (let i = 0; i < 24; i++) {
+    const timeUnitEl = document.createElement("div");
+    timeUnitEl.className = "time-unit";
+    timeUnitEl.textContent = String(i).padStart(2, '0') + ':00';
+
+    const timeUnitHeight = 100 / 24;
+    timeUnitEl.style.height = `${timeUnitHeight}%`;
+    timeUnitColumnEl.appendChild(timeUnitEl);
+  }
+  // This will create the day columns
+  const weekDays = ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"];
+  for (let i = 0; i < 7; i++) {
+
+    // Makes the day column 
+    const dayDate = new Date(date);
+    dayDate.setDate(date.getDate() + i);
+    const dateStr = dayDate.toISOString().split('T')[0];
+
+    const dayColumn = document.createElement("div");
+    dayColumn.className = "day-column";
+    
+    // Adds the day header
+    const dayHeader = document.createElement("div"); 
+    dayHeader.className = "day-header";
+    dayHeader.textContent = weekDays[i];
+    dayColumn.appendChild(dayHeader);
+
+    if (weekDays[i] === "Zo") {
+      dayColumn.style.background = "#f0f8ff";
+    } else if (weekDays[i] === "Za") {
+      dayColumn.style.background = "#f0f8ff";
+    }
+
+
+    // Filter events for this day
+    const dayEvents = events.filter(e => e.date === dateStr);
+
+    // Create events for the day
+    dayEvents.forEach(event => {
+      const position = getEventPosition(event.start_time, event.end_time);
+
+      const timeSlotEl = document.createElement("div");
+      timeSlotEl.className = "time-slot";
+      timeSlotEl.style.position = "absolute";
+      timeSlotEl.style.top = position.top;
+      timeSlotEl.style.height = position.height;
+      timeSlotEl.style.width = "95%";
+      timeSlotEl.style.left = "5%";
+
+      const eventEl = document.createElement("div");
+      eventEl.className = "event";
+      eventEl.textContent = event.title.split(" - ")[0];
+      eventEl.style.height = "100%";
+      eventEl.style.margin = "0px";
+      
+
+      timeSlotEl.appendChild(eventEl);
+      dayColumn.appendChild(timeSlotEl);
+    });
+    calendarEl.appendChild(dayColumn);
   }
 }
 
@@ -268,7 +393,7 @@ function openMiniNav() {
 
   miniNavArrow1.style.transform = "rotate(-180deg)";
   miniNavArrow2.style.transform = "rotate(180deg)";
-  
+
   Visibility = true;
 }
 
@@ -283,7 +408,7 @@ function closeMiniNav() {
     miniNav.style.transform = "translate(0, 60%)";
     miniNavArrow1.style.transform = "rotate(0deg)";
     miniNavArrow2.style.transform = "rotate(0deg)";
-    
+
     Visibility = false;
   }, 50);
 }
@@ -300,8 +425,10 @@ function MiniNavigationModalVisibility() {
 // Navigate Between Months
 function changeMonth(offset) {
   currentDate.setMonth(currentDate.getMonth() + offset);
-  renderCalendar(currentDate);
+  renderCalendar();
 }
 
+
+
 // Run on Page Load
-renderCalendar(currentDate);
+renderCalendar();
