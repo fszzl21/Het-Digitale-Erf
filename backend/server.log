@@ -1,0 +1,41 @@
+Database initialization complete.
+Registering route: POST ^/api/auth/login$
+Registering route: POST ^/api/auth/logout$
+Registering route: GET ^/api/reservations$
+Registering route: POST ^/api/reservations$
+Registering route: PUT ^/api/reservations/(\d+)$
+Registering route: DELETE ^/api/reservations/(\d+)$
+Registering route: GET ^/api/occupancy$
+Registering route: PUT ^/api/occupancy/(\d+)$
+Registering route: GET ^/api/guests$
+Registering route: POST ^/api/guests$
+Registering route: PUT ^/api/guests/(\d+)$
+Registering route: DELETE ^/api/guests/(\d+)$
+Registering route: GET ^/api/tasks$
+Registering route: POST ^/api/tasks$
+Registering route: PUT ^/api/tasks/(\d+)$
+Registering route: DELETE ^/api/tasks/(\d+)$
+Registering route: GET ^/api/absences$
+Registering route: POST ^/api/absences$
+Registering route: PUT ^/api/absences/(\d+)$
+Registering route: DELETE ^/api/absences/(\d+)$
+Registering route: GET ^/api/activities$
+Registering route: POST ^/api/activities$
+Registering route: PUT ^/api/activities/(\d+)$
+Registering route: DELETE ^/api/activities/(\d+)$
+Starting server on http://localhost:8000
+DEBUG: Request POST /api/auth/login
+DEBUG: Router has 24 routes
+127.0.0.1 - - [17/Dec/2025 11:55:27] "POST /api/auth/login HTTP/1.1" 200 -
+DEBUG: Request GET /api/occupancy
+DEBUG: Router has 24 routes
+127.0.0.1 - - [17/Dec/2025 11:55:27] "GET /api/occupancy HTTP/1.1" 200 -
+DEBUG: Request POST /api/reservations
+DEBUG: Router has 24 routes
+127.0.0.1 - - [17/Dec/2025 11:55:27] "POST /api/reservations HTTP/1.1" 201 -
+DEBUG: Request GET /api/reservations
+DEBUG: Router has 24 routes
+127.0.0.1 - - [17/Dec/2025 11:55:27] "GET /api/reservations HTTP/1.1" 200 -
+DEBUG: Request POST /api/tasks
+DEBUG: Router has 24 routes
+127.0.0.1 - - [17/Dec/2025 11:55:27] "POST /api/tasks HTTP/1.1" 201 -
