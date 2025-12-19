@@ -22,9 +22,9 @@ include "calendar.php";
   <!-- Calendar -->
   <div class="calendar">
     <div class="nav-btn-container">
-      <button onclick="changeMonth(-1)" class="nav-btn"><=</button>
+      <button onclick="changeDates(-1)" class="nav-btn"><=</button>
       <h2 id="monthYear" style="margin: 0"></h2>
-      <button onclick="changeMonth(1)" class="nav-btn">=></button>
+      <button onclick="changeDates(1)" class="nav-btn">=></button>
     </div>
 
     <div class="calendar-grid" id="calendar"></div>

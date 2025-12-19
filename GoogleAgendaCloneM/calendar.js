@@ -3,16 +3,18 @@ const monthYearEl = document.getElementById("monthYear");
 const modalEl = document.getElementById("eventModal");
 const TMEmodal = document.getElementById("TMEmodal") // TME stands for TooManyEvents
 const TMEel = document.getElementById("TMEContainer");
+const realCurrentDay = new Date();
 let currentDate = new Date();
 let Visibility = true;
 let miniNavTimeout;
 
-let currentCalendarView = "week"; // Possible values: "month", "week", "day"
+let currentCalendarView = "month"; // Possible values: "month", "week", "day"
 
 function renderCalendar() {
   if (currentCalendarView === "month") {
     renderMonthCalendar(currentDate);
   } else if (currentCalendarView === "week") {
+
     renderWeekCalendar(currentDate);
   } else if (currentCalendarView === "day") {
     // Function to render day view
@@ -44,6 +46,7 @@ function renderMonthCalendar(date = new Date()) {
   const totalDays = new Date(year, month + 1, 0).getDate();
   const firstDayOfMonth = new Date(year, month, 1).getDay();
 
+ // Makes the h2 header change date and year
   monthYearEl.textContent = date.toLocaleDateString("nl-NL", {
     month: "long",
     year: "numeric",
@@ -57,6 +60,7 @@ function renderMonthCalendar(date = new Date()) {
     calendarEl.appendChild(dayEl);
   });
 
+  // Creating blank days
   for (let i = 0; i < firstDayOfMonth; i++) {
     calendarEl.appendChild(document.createElement("div"));
   }
@@ -163,7 +167,7 @@ function renderMonthCalendar(date = new Date()) {
     calendarEl.appendChild(cell);
   }
 }
-
+// This function calculates the top and height for the event timeslot.
 function getEventPosition(startTime, endTime, dayStartHour = 0, dayEndHour = 24) {
   // This will split the time strings and convert them to variables 
   const [startHour, startMin] = startTime.split(':').map(Number);
@@ -171,14 +175,12 @@ function getEventPosition(startTime, endTime, dayStartHour = 0, dayEndHour = 24)
 
   const dayTotalHours = dayEndHour - dayStartHour;
 
-  const offSetHeight = (16 / calendarEl.clientHeight) * 100;
-
   // Convert time to minutes from day start
   const startMinutes = (startHour - dayStartHour) * 60 + startMin;
   const endMinutes = (endHour - dayStartHour) * 60 + endMin;
 
   // Calculate percentages (0-100%)
-  const topPercent = ((startMinutes / (dayTotalHours * 60)) * 100) ;
+  const topPercent = ((startMinutes / (dayTotalHours * 60)) * 100);
   const heightPercent = ((endMinutes - startMinutes) / (dayTotalHours * 60)) * 100;
 
   return {
@@ -188,14 +190,21 @@ function getEventPosition(startTime, endTime, dayStartHour = 0, dayEndHour = 24)
 }
 
 // Generate Week Calendar View
-function renderWeekCalendar(date = new Date()) {
+function renderWeekCalendar(date = new Date(), switched) {
   calendarEl.innerHTML = "";
 
   calendarEl.style.display = "flex";
   calendarEl.style.flexDirection = "row";
   calendarEl.style.height = "100%";
-  calendarEl.style.gap = "10px";
+  calendarEl.style.gap = "0px";
   calendarEl.style.position = "relative";
+  calendarEl.style.paddingTop = "35px";
+
+  // Makes the h2 header change date and year
+  monthYearEl.textContent = date.toLocaleDateString("nl-NL", {
+    month: "long",
+    year: "numeric",
+  });
 
   const timeUnitColumnEl = document.createElement("div");
   timeUnitColumnEl.className = "time-unit-column";
@@ -211,30 +220,44 @@ function renderWeekCalendar(date = new Date()) {
     timeUnitEl.style.height = `${timeUnitHeight}%`;
     timeUnitColumnEl.appendChild(timeUnitEl);
   }
+
   // This will create the day columns
   const weekDays = ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"];
   for (let i = 0; i < 7; i++) {
 
     // Makes the day column 
+    const firstDayOfWeek = currentDate.getDate() - currentDate.getDay();
     const dayDate = new Date(date);
-    dayDate.setDate(date.getDate() + i);
-    const dateStr = dayDate.toISOString().split('T')[0];
+    dayDate.setDate(firstDayOfWeek + i);
+    const dateStr = dayDate.toISOString().split('T')[0]; // dateStr = yyyy-mm-dd
 
     const dayColumn = document.createElement("div");
     dayColumn.className = "day-column";
-    
+
     // Adds the day header
-    const dayHeader = document.createElement("div"); 
+    const dayHeader = document.createElement("div");
     dayHeader.className = "day-header";
-    dayHeader.textContent = weekDays[i];
+    dayHeader.textContent = weekDays[i] + " " + dateStr.split("-")[2]
     dayColumn.appendChild(dayHeader);
 
+    // Adding extra color to weekend to sepperate from rest
     if (weekDays[i] === "Zo") {
-      dayColumn.style.background = "#f0f8ff";
+      dayColumn.style.background = "#e9e9e9ff";
     } else if (weekDays[i] === "Za") {
-      dayColumn.style.background = "#f0f8ff";
+      dayColumn.style.background = "#e9e9e9ff";
     }
 
+    // Give today's day a marker
+    if (
+      String(realCurrentDay.getFullYear()) === dateStr.split("-")[0] &&
+      String(realCurrentDay.getMonth() + 1) === dateStr.split("-")[1] &&
+      String(realCurrentDay.getDate()) === dateStr.split("-")[2]
+    ) {
+      dayColumn.style.background = "var(--primary-light)"; 
+      dayHeader.style.fontWeight = "bold";
+      console.log("Today's date highlighted in week view.");
+      console.log(dateStr);
+    } else{console.log("No highlight today.")} //WIP
 
     // Filter events for this day
     const dayEvents = events.filter(e => e.date === dateStr);
@@ -256,7 +279,7 @@ function renderWeekCalendar(date = new Date()) {
       eventEl.textContent = event.title.split(" - ")[0];
       eventEl.style.height = "100%";
       eventEl.style.margin = "0px";
-      
+
 
       timeSlotEl.appendChild(eventEl);
       dayColumn.appendChild(timeSlotEl);
@@ -420,6 +443,25 @@ function MiniNavigationModalVisibility() {
   } else {
     closeMiniNav();
   }
+}
+// Navigate Between dates
+function changeDates(offset) {
+  if (currentCalendarView === "month") {
+    changeMonth(offset)
+  } else if (currentCalendarView === "week") {
+    changeWeek(offset)
+  } else if (currentCalendarView === "day") {
+    // Function to render day view
+  }
+}
+
+// Navigate Between Days
+
+
+// Navigate Between Weeks
+function changeWeek(offset) {
+  currentDate.setDate(currentDate.getDate() + (7 * offset));
+  renderCalendar();
 }
 
 // Navigate Between Months
