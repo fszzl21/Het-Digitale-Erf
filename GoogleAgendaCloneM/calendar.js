@@ -190,7 +190,7 @@ function getEventPosition(startTime, endTime, dayStartHour = 0, dayEndHour = 24)
 }
 
 // Generate Week Calendar View
-function renderWeekCalendar(date = new Date(), switched) {
+function renderWeekCalendar(date = new Date()) {
   calendarEl.innerHTML = "";
 
   calendarEl.style.display = "flex";
@@ -250,14 +250,16 @@ function renderWeekCalendar(date = new Date(), switched) {
     // Give today's day a marker
     if (
       String(realCurrentDay.getFullYear()) === dateStr.split("-")[0] &&
-      String(realCurrentDay.getMonth() + 1) === dateStr.split("-")[1] &&
-      String(realCurrentDay.getDate()) === dateStr.split("-")[2]
+      String(realCurrentDay.getMonth() + 1) === dateStr.split("-")[1].replace(/^0+/, "") &&
+      String(realCurrentDay.getDate()) === dateStr.split("-")[2].replace(/^0+/, "")
     ) {
       dayColumn.style.background = "var(--primary-light)"; 
       dayHeader.style.fontWeight = "bold";
       console.log("Today's date highlighted in week view.");
       console.log(dateStr);
-    } else{console.log("No highlight today.")} //WIP
+    } else{
+      console.log("No highlight today.");
+    } //WIP
 
     // Filter events for this day
     const dayEvents = events.filter(e => e.date === dateStr);
