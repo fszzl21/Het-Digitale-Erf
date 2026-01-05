@@ -100,7 +100,6 @@ include "calendar.php";
 
   <!-- Mini navigation menu -->
 
-
   <div class="miniNav" id="miniNav"
     onmouseenter="openMiniNav()"
     onmouseleave="closeMiniNav()">

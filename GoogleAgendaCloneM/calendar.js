@@ -13,6 +13,7 @@ let currentCalendarView = "month"; // Possible values: "month", "week", "day"
 function renderCalendar() {
   if (currentCalendarView === "month") {
     renderMonthCalendar(currentDate);
+
   } else if (currentCalendarView === "week") {
 
     renderWeekCalendar(currentDate);
@@ -225,10 +226,11 @@ function renderWeekCalendar(date = new Date()) {
   const weekDays = ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"];
   for (let i = 0; i < 7; i++) {
 
-    // Makes the day column 
-    const firstDayOfWeek = currentDate.getDate() - currentDate.getDay();
+    // Makes the day column
+    const firstDayOfWeek = currentDate.getDate() - currentDate.getDay(); // Always a Sunday
     const dayDate = new Date(date);
     dayDate.setDate(firstDayOfWeek + i);
+    console.log(firstDayOfWeek)
     const dateStr = dayDate.toISOString().split('T')[0]; // dateStr = yyyy-mm-dd
 
     const dayColumn = document.createElement("div");
@@ -240,26 +242,24 @@ function renderWeekCalendar(date = new Date()) {
     dayHeader.textContent = weekDays[i] + " " + dateStr.split("-")[2]
     dayColumn.appendChild(dayHeader);
 
-    // Adding extra color to weekend to sepperate from rest
-    if (weekDays[i] === "Zo") {
+    // Adding extra color to weekend to separate from rest
+    if (weekDays[i] === "Zo" || weekDays[i] === "Za") {
       dayColumn.style.background = "#e9e9e9ff";
-    } else if (weekDays[i] === "Za") {
-      dayColumn.style.background = "#e9e9e9ff";
-    }
+    } 
 
     // Give today's day a marker
     if (
       String(realCurrentDay.getFullYear()) === dateStr.split("-")[0] &&
-      String(realCurrentDay.getMonth() + 1) === dateStr.split("-")[1].replace(/^0+/, "") &&
+      String(realCurrentDay.getMonth() + 1) === dateStr.split("-")[1].replace(/^0+/, "") && // The replace function removes leading zeros.
       String(realCurrentDay.getDate()) === dateStr.split("-")[2].replace(/^0+/, "")
     ) {
       dayColumn.style.background = "var(--primary-light)"; 
       dayHeader.style.fontWeight = "bold";
       console.log("Today's date highlighted in week view.");
       console.log(dateStr);
-    } else{
+    } else{ // No highlight cuz not today
       console.log("No highlight today.");
-    } //WIP
+    }
 
     // Filter events for this day
     const dayEvents = events.filter(e => e.date === dateStr);
