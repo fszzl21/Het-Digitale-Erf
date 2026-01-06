@@ -13,12 +13,10 @@ let currentCalendarView = "month"; // Possible values: "month", "week", "day"
 function renderCalendar() {
   if (currentCalendarView === "month") {
     renderMonthCalendar(currentDate);
-
   } else if (currentCalendarView === "week") {
-
     renderWeekCalendar(currentDate);
   } else if (currentCalendarView === "day") {
-    // Function to render day view
+    renderDayCalendar(currentDate);
   }
 }
 
@@ -189,6 +187,9 @@ function getEventPosition(startTime, endTime, dayStartHour = 0, dayEndHour = 24)
   };
 }
 
+
+
+
 // Generate Week Calendar View
 function renderWeekCalendar(date = new Date()) {
   calendarEl.innerHTML = "";
@@ -277,7 +278,6 @@ function renderWeekCalendar(date = new Date()) {
 
       const eventEl = document.createElement("div"); // Creates event element
       eventEl.className = "event-week";
-      eventEl.id = event.id;
       eventEl.textContent = event.title.split(" - ")[0];
       eventEl.style.height = "100%";
       eventEl.style.margin = "0px";
@@ -290,19 +290,116 @@ function renderWeekCalendar(date = new Date()) {
       dayColumn.appendChild(timeSlotEl);
     });
 
-    if (dayEvents.length > 1) { // checks if more then 1 event on the same day
+    /*if (dayEvents.length > 1) { // checks if more then 1 event on the same day
       if (doTheyOverlap(dayEvents)) { // checks if events have overlap on same time
         for (let counter = 0; counter < dayEvents.length; counter++) {
           //dayEvents[counter].style.backgroundColor = "red"; 
           console.log(dayEvents[counter]);
         }
       }
-    }
+    }*/
     calendarEl.appendChild(dayColumn);
   }
 }
 
-function doTheyOverlap(dayEvents) { // checks if events on given day have overlap on same time
+
+
+// Generate Day Calendar View
+function renderDayCalendar(date = new Date()) {
+  calendarEl.innerHTML = "";
+
+  calendarEl.style.display = "flex";
+  calendarEl.style.flexDirection = "row";
+  calendarEl.style.height = "100%";
+  calendarEl.style.gap = "0px";
+  calendarEl.style.position = "relative";
+  calendarEl.style.paddingTop = "35px";
+
+  const weekDays = ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"];
+  const dayDate = new Date(date);
+  const dateStr = dayDate.toISOString().split('T')[0]; // dateStr = yyyy-mm-dd
+  
+  // Makes the h2 header change date and year
+  monthYearEl.textContent = date.toLocaleDateString("nl-NL", {
+    month: "long",
+    year: "numeric",
+  }) + " | " + dateStr.split("-")[2] + " " + weekDays[dayDate.getDay()];
+
+  const timeUnitColumnEl = document.createElement("div");
+  timeUnitColumnEl.className = "time-unit-column";
+  calendarEl.appendChild(timeUnitColumnEl);
+
+  // This will make the time units on the left side
+  for (let i = 0; i < 24; i++) {
+    const timeUnitEl = document.createElement("div");
+    timeUnitEl.className = "time-unit";
+    timeUnitEl.textContent = String(i).padStart(2, '0') + ':00';
+
+    const timeUnitHeight = 100 / 24;
+    timeUnitEl.style.height = `${timeUnitHeight}%`;
+    timeUnitColumnEl.appendChild(timeUnitEl);
+  }
+    // Makes the day column
+    
+
+    const dayColumn = document.createElement("div");
+    dayColumn.className = "day-column";
+
+    dayColumn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openModalForAdd(dateStr);
+    })
+
+    // Give today's day a marker
+    if (
+      String(realCurrentDay.getFullYear()) === dateStr.split("-")[0] &&
+      String(realCurrentDay.getMonth() + 1) === dateStr.split("-")[1].replace(/^0+/, "") && // The replace function removes leading zeros.
+      String(realCurrentDay.getDate()) === dateStr.split("-")[2].replace(/^0+/, "")
+    ) {
+      dayColumn.style.background = "var(--primary-light)";
+    }
+
+    // Filter events for this day
+    const dayEvents = events.filter(e => e.date === dateStr);
+
+    // Create events for the day
+    dayEvents.forEach(event => {
+      const position = getEventPosition(event.start_time, event.end_time);
+
+      const timeSlotEl = document.createElement("div"); // Creates timeslots
+      timeSlotEl.className = "time-slot";
+      timeSlotEl.style.position = "absolute";
+      timeSlotEl.style.top = position.top;
+      timeSlotEl.style.height = position.height;
+      timeSlotEl.style.width = "95%";
+      timeSlotEl.style.left = "5%";
+
+      const eventEl = document.createElement("div"); // Creates event element
+      eventEl.className = "event-week";
+      eventEl.textContent = event.title.split(" - ")[0];
+      eventEl.style.height = "100%";
+      eventEl.style.margin = "0px";
+      eventEl.addEventListener("click", (e) => { // Opens edit modal when click on event
+        e.stopPropagation();
+        openModalTMEForEdit(dayEvents, event);
+      });
+
+      timeSlotEl.appendChild(eventEl);
+      dayColumn.appendChild(timeSlotEl);
+    });
+
+    /*if (dayEvents.length > 1) { // checks if more then 1 event on the same day
+      if (doTheyOverlap(dayEvents)) { // checks if events have overlap on same time
+        for (let counter = 0; counter < dayEvents.length; counter++) {
+          //dayEvents[counter].style.backgroundColor = "red"; 
+          console.log(dayEvents[counter]);
+        }
+      }
+    }*/
+    calendarEl.appendChild(dayColumn);
+}
+
+/* function doTheyOverlap(dayEvents) { // checks if events on given day have overlap on same time
   let answer = false;
 
   for (let i = 0; i < dayEvents.length; i++) {
@@ -324,7 +421,7 @@ function doTheyOverlap(dayEvents) { // checks if events on given day have overla
   }
 
   return answer;
-}
+} */
 
 function AddGeneralAppointment(e) { // Opens add appointment modal
   e.stopPropagation();
@@ -489,12 +586,15 @@ function changeDates(offset) {
   } else if (currentCalendarView === "week") {
     changeWeek(offset)
   } else if (currentCalendarView === "day") {
-    // Function to render day view
+    changeDay(offset)
   }
 }
 
 // Navigate Between Days
-
+function changeDay(offset) {
+  currentDate.setDate(currentDate.getDate() + offset);
+  renderCalendar();
+}
 
 // Navigate Between Weeks
 function changeWeek(offset) {
@@ -507,8 +607,6 @@ function changeMonth(offset) {
   currentDate.setMonth(currentDate.getMonth() + offset);
   renderCalendar();
 }
-
-
 
 // Run on Page Load
 renderCalendar();
