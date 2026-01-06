@@ -47,7 +47,7 @@ function renderMonthCalendar(date = new Date()) {
   const totalDays = new Date(year, month + 1, 0).getDate();
   const firstDayOfMonth = new Date(year, month, 1).getDay();
 
- // Makes the h2 header change date and year
+  // Makes the h2 header change date and year
   monthYearEl.textContent = date.toLocaleDateString("nl-NL", {
     month: "long",
     year: "numeric",
@@ -114,7 +114,6 @@ function renderMonthCalendar(date = new Date()) {
           ev.addEventListener("click", (e) => {
             e.stopPropagation();
             renderEventsTME();
-            console.log("test~!")
           })
 
           eventSwitch = true
@@ -230,11 +229,15 @@ function renderWeekCalendar(date = new Date()) {
     const firstDayOfWeek = currentDate.getDate() - currentDate.getDay(); // Always a Sunday
     const dayDate = new Date(date);
     dayDate.setDate(firstDayOfWeek + i);
-    console.log(firstDayOfWeek)
     const dateStr = dayDate.toISOString().split('T')[0]; // dateStr = yyyy-mm-dd
 
     const dayColumn = document.createElement("div");
     dayColumn.className = "day-column";
+
+    dayColumn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openModalForAdd(dateStr);
+    })
 
     // Adds the day header
     const dayHeader = document.createElement("div");
@@ -245,7 +248,7 @@ function renderWeekCalendar(date = new Date()) {
     // Adding extra color to weekend to separate from rest
     if (weekDays[i] === "Zo" || weekDays[i] === "Za") {
       dayColumn.style.background = "#e9e9e9ff";
-    } 
+    }
 
     // Give today's day a marker
     if (
@@ -253,12 +256,8 @@ function renderWeekCalendar(date = new Date()) {
       String(realCurrentDay.getMonth() + 1) === dateStr.split("-")[1].replace(/^0+/, "") && // The replace function removes leading zeros.
       String(realCurrentDay.getDate()) === dateStr.split("-")[2].replace(/^0+/, "")
     ) {
-      dayColumn.style.background = "var(--primary-light)"; 
+      dayColumn.style.background = "var(--primary-light)";
       dayHeader.style.fontWeight = "bold";
-      console.log("Today's date highlighted in week view.");
-      console.log(dateStr);
-    } else{ // No highlight cuz not today
-      console.log("No highlight today.");
     }
 
     // Filter events for this day
@@ -268,7 +267,7 @@ function renderWeekCalendar(date = new Date()) {
     dayEvents.forEach(event => {
       const position = getEventPosition(event.start_time, event.end_time);
 
-      const timeSlotEl = document.createElement("div");
+      const timeSlotEl = document.createElement("div"); // Creates timeslots
       timeSlotEl.className = "time-slot";
       timeSlotEl.style.position = "absolute";
       timeSlotEl.style.top = position.top;
@@ -276,21 +275,58 @@ function renderWeekCalendar(date = new Date()) {
       timeSlotEl.style.width = "95%";
       timeSlotEl.style.left = "5%";
 
-      const eventEl = document.createElement("div");
-      eventEl.className = "event";
+      const eventEl = document.createElement("div"); // Creates event element
+      eventEl.className = "event-week";
+      eventEl.id = event.id;
       eventEl.textContent = event.title.split(" - ")[0];
       eventEl.style.height = "100%";
       eventEl.style.margin = "0px";
-
+      eventEl.addEventListener("click", (e) => { // Opens edit modal when click on event
+        e.stopPropagation();
+        openModalTMEForEdit(dayEvents, event);
+      });
 
       timeSlotEl.appendChild(eventEl);
       dayColumn.appendChild(timeSlotEl);
     });
+
+    if (dayEvents.length > 1) { // checks if more then 1 event on the same day
+      if (doTheyOverlap(dayEvents)) { // checks if events have overlap on same time
+        for (let counter = 0; counter < dayEvents.length; counter++) {
+          //dayEvents[counter].style.backgroundColor = "red"; 
+          console.log(dayEvents[counter]);
+        }
+      }
+    }
     calendarEl.appendChild(dayColumn);
   }
 }
 
-function AddGeneralAppointment(e) {
+function doTheyOverlap(dayEvents) { // checks if events on given day have overlap on same time
+  let answer = false;
+
+  for (let i = 0; i < dayEvents.length; i++) {
+    for (let j = i + 1; j < dayEvents.length; j++) {
+      const event1 = dayEvents[i];
+      const event2 = dayEvents[j];
+
+      const start1 = new Date(`1970-01-01T${event1.start_time}`);
+      const end1 = new Date(`1970-01-01T${event1.end_time}`);
+      const start2 = new Date(`1970-01-01T${event2.start_time}`);
+      const end2 = new Date(`1970-01-01T${event2.end_time}`);
+
+      if (start2 < end1 && start1 < end2) {
+        answer = true;
+        break;
+      }
+    }
+    if (answer) break;
+  }
+
+  return answer;
+}
+
+function AddGeneralAppointment(e) { // Opens add appointment modal
   e.stopPropagation();
   openModalForAdd();
 }
