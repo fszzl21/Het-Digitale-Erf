@@ -8,8 +8,14 @@ let currentDate = new Date();
 let Visibility = true;
 let miniNavTimeout;
 
-let currentCalendarView = "month"; // Possible values: "month", "week", "day"
+var currentCalendarView = null; // Possible values: "month", "week", "day"
 
+if (sessionStorage.getItem("calendarView")) {
+  currentCalendarView = sessionStorage.getItem("calendarView");
+} else {
+  var currentCalendarView = "week";
+}
+currentCalendarView
 function renderCalendar() {
   if (currentCalendarView === "month") {
     renderMonthCalendar(currentDate);
@@ -22,7 +28,8 @@ function renderCalendar() {
 
 // Switch to different calendar view
 function switchCalendarView(viewType) {
-  currentCalendarView = viewType;
+  sessionStorage.setItem("calendarView", viewType);
+  currentCalendarView = sessionStorage.getItem("calendarView");
   renderCalendar();
 }
 
@@ -239,6 +246,10 @@ function renderWeekCalendar(date = new Date()) {
       e.stopPropagation();
       openModalForAdd(dateStr);
     })
+
+    // Checks if there is overlap with the week between months
+    
+
 
     // Adds the day header
     const dayHeader = document.createElement("div");
