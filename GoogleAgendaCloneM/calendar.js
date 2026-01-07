@@ -1,7 +1,7 @@
 const calendarEl = document.getElementById("calendar");
 const monthYearEl = document.getElementById("monthYear");
 const modalEl = document.getElementById("eventModal");
-const TMEmodal = document.getElementById("TMEmodal") // TME stands for TooManyEvents
+const TMEmodal = document.getElementById("TMEmodal"); // TME stands for TooManyEvents
 const TMEel = document.getElementById("TMEContainer");
 const realCurrentDay = new Date();
 let currentDate = new Date();
@@ -14,8 +14,9 @@ if (sessionStorage.getItem("calendarView")) {
   currentCalendarView = sessionStorage.getItem("calendarView");
 } else {
   var currentCalendarView = "week";
-}
-currentCalendarView
+};
+
+// Render the Calendar based on current view
 function renderCalendar() {
   if (currentCalendarView === "month") {
     renderMonthCalendar(currentDate);
@@ -24,14 +25,14 @@ function renderCalendar() {
   } else if (currentCalendarView === "day") {
     renderDayCalendar(currentDate);
   }
-}
+};
 
 // Switch to different calendar view
 function switchCalendarView(viewType) {
   sessionStorage.setItem("calendarView", viewType);
   currentCalendarView = sessionStorage.getItem("calendarView");
   renderCalendar();
-}
+};
 
 // Generate Month Calendar View
 function renderMonthCalendar(date = new Date()) {
@@ -192,7 +193,7 @@ function getEventPosition(startTime, endTime, dayStartHour = 0, dayEndHour = 24)
     top: `${topPercent}%`,
     height: `${heightPercent}%`
   };
-}
+};
 
 
 
@@ -200,7 +201,6 @@ function getEventPosition(startTime, endTime, dayStartHour = 0, dayEndHour = 24)
 // Generate Week Calendar View
 function renderWeekCalendar(date = new Date()) {
   calendarEl.innerHTML = "";
-
   calendarEl.style.display = "flex";
   calendarEl.style.flexDirection = "row";
   calendarEl.style.height = "100%";
@@ -238,7 +238,6 @@ function renderWeekCalendar(date = new Date()) {
     const dayDate = new Date(date);
     dayDate.setDate(firstDayOfWeek + i);
     const dateStr = dayDate.toISOString().split('T')[0]; // dateStr = yyyy-mm-dd
-
     const dayColumn = document.createElement("div");
     dayColumn.className = "day-column";
 
@@ -247,9 +246,12 @@ function renderWeekCalendar(date = new Date()) {
       openModalForAdd(dateStr);
     })
 
-    // Checks if there is overlap with the week between months
-    
-
+    // Checks if the day is in the same month as the currentDate
+    if (dayDate.getFullYear() !== date.getFullYear()) { // true if weeks overlap from different years
+      var yearOverlap = true;
+    } else if (dayDate.getMonth() !== date.getMonth()) { // true if weeks overlap from different months
+      var monthOverlap = true;
+    }
 
     // Adds the day header
     const dayHeader = document.createElement("div");
@@ -311,7 +313,37 @@ function renderWeekCalendar(date = new Date()) {
     }*/
     calendarEl.appendChild(dayColumn);
   }
-}
+  // If week overlap from different month then it will display the months of sunday and saturday in the week in the header.
+  let overlapFirstDay = new Date(date);
+  overlapFirstDay.setDate((overlapFirstDay.getDate() - date.getDay())); // overlapFirstDay is Sunday
+  console.log(overlapFirstDay)
+
+  let overlapLastDay = new Date(overlapFirstDay);
+  overlapLastDay.setDate(overlapLastDay.getDate() + 6) // overlapLastDay is Saturday
+  console.log(overlapLastDay)
+
+  if (yearOverlap) { // if year also changes in week, do same as monthOverlap but add year
+    console.log("Week overlaps different year");
+    monthYearEl.textContent =
+      overlapFirstDay.toLocaleDateString("nl-NL", {
+        month: "long",
+        year: "numeric", // <<<---
+      }) + " | " + overlapLastDay.toLocaleDateString("nl-NL", {
+        month: "long",
+        year: "numeric",
+      });
+
+  } else if (monthOverlap) { // if month changes it will update the header
+    console.log("Week overlaps different month");
+    monthYearEl.textContent =
+      overlapFirstDay.toLocaleDateString("nl-NL", {
+        month: "long"
+      }) + " | " + overlapLastDay.toLocaleDateString("nl-NL", {
+        month: "long",
+        year: "numeric",
+      });
+  };
+};
 
 
 
@@ -329,7 +361,7 @@ function renderDayCalendar(date = new Date()) {
   const weekDays = ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"];
   const dayDate = new Date(date);
   const dateStr = dayDate.toISOString().split('T')[0]; // dateStr = yyyy-mm-dd
-  
+
   // Makes the h2 header change date and year
   monthYearEl.textContent = date.toLocaleDateString("nl-NL", {
     month: "long",
@@ -350,65 +382,65 @@ function renderDayCalendar(date = new Date()) {
     timeUnitEl.style.height = `${timeUnitHeight}%`;
     timeUnitColumnEl.appendChild(timeUnitEl);
   }
-    // Makes the day column
-    
+  // Makes the day column
 
-    const dayColumn = document.createElement("div");
-    dayColumn.className = "day-column";
 
-    dayColumn.addEventListener("click", (e) => {
+  const dayColumn = document.createElement("div");
+  dayColumn.className = "day-column";
+
+  dayColumn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    openModalForAdd(dateStr);
+  })
+
+  // Give today's day a marker
+  if (
+    String(realCurrentDay.getFullYear()) === dateStr.split("-")[0] &&
+    String(realCurrentDay.getMonth() + 1) === dateStr.split("-")[1].replace(/^0+/, "") && // The replace function removes leading zeros.
+    String(realCurrentDay.getDate()) === dateStr.split("-")[2].replace(/^0+/, "")
+  ) {
+    dayColumn.style.background = "var(--primary-light)";
+  }
+
+  // Filter events for this day
+  const dayEvents = events.filter(e => e.date === dateStr);
+
+  // Create events for the day
+  dayEvents.forEach(event => {
+    const position = getEventPosition(event.start_time, event.end_time);
+
+    const timeSlotEl = document.createElement("div"); // Creates timeslots
+    timeSlotEl.className = "time-slot";
+    timeSlotEl.style.position = "absolute";
+    timeSlotEl.style.top = position.top;
+    timeSlotEl.style.height = position.height;
+    timeSlotEl.style.width = "95%";
+    timeSlotEl.style.left = "5%";
+
+    const eventEl = document.createElement("div"); // Creates event element
+    eventEl.className = "event-week";
+    eventEl.textContent = event.title.split(" - ")[0];
+    eventEl.style.height = "100%";
+    eventEl.style.margin = "0px";
+    eventEl.addEventListener("click", (e) => { // Opens edit modal when click on event
       e.stopPropagation();
-      openModalForAdd(dateStr);
-    })
-
-    // Give today's day a marker
-    if (
-      String(realCurrentDay.getFullYear()) === dateStr.split("-")[0] &&
-      String(realCurrentDay.getMonth() + 1) === dateStr.split("-")[1].replace(/^0+/, "") && // The replace function removes leading zeros.
-      String(realCurrentDay.getDate()) === dateStr.split("-")[2].replace(/^0+/, "")
-    ) {
-      dayColumn.style.background = "var(--primary-light)";
-    }
-
-    // Filter events for this day
-    const dayEvents = events.filter(e => e.date === dateStr);
-
-    // Create events for the day
-    dayEvents.forEach(event => {
-      const position = getEventPosition(event.start_time, event.end_time);
-
-      const timeSlotEl = document.createElement("div"); // Creates timeslots
-      timeSlotEl.className = "time-slot";
-      timeSlotEl.style.position = "absolute";
-      timeSlotEl.style.top = position.top;
-      timeSlotEl.style.height = position.height;
-      timeSlotEl.style.width = "95%";
-      timeSlotEl.style.left = "5%";
-
-      const eventEl = document.createElement("div"); // Creates event element
-      eventEl.className = "event-week";
-      eventEl.textContent = event.title.split(" - ")[0];
-      eventEl.style.height = "100%";
-      eventEl.style.margin = "0px";
-      eventEl.addEventListener("click", (e) => { // Opens edit modal when click on event
-        e.stopPropagation();
-        openModalTMEForEdit(dayEvents, event);
-      });
-
-      timeSlotEl.appendChild(eventEl);
-      dayColumn.appendChild(timeSlotEl);
+      openModalTMEForEdit(dayEvents, event);
     });
 
-    /*if (dayEvents.length > 1) { // checks if more then 1 event on the same day
-      if (doTheyOverlap(dayEvents)) { // checks if events have overlap on same time
-        for (let counter = 0; counter < dayEvents.length; counter++) {
-          //dayEvents[counter].style.backgroundColor = "red"; 
-          console.log(dayEvents[counter]);
-        }
+    timeSlotEl.appendChild(eventEl);
+    dayColumn.appendChild(timeSlotEl);
+  });
+
+  /*if (dayEvents.length > 1) { // checks if more then 1 event on the same day
+    if (doTheyOverlap(dayEvents)) { // checks if events have overlap on same time
+      for (let counter = 0; counter < dayEvents.length; counter++) {
+        //dayEvents[counter].style.backgroundColor = "red"; 
+        console.log(dayEvents[counter]);
       }
-    }*/
-    calendarEl.appendChild(dayColumn);
-}
+    }
+  }*/
+  calendarEl.appendChild(dayColumn);
+};
 
 /* function doTheyOverlap(dayEvents) { // checks if events on given day have overlap on same time
   let answer = false;
@@ -437,7 +469,7 @@ function renderDayCalendar(date = new Date()) {
 function AddGeneralAppointment(e) { // Opens add appointment modal
   e.stopPropagation();
   openModalForAdd();
-}
+};
 
 // Add Event Modal
 function openModalForAdd(dateStr) {
@@ -459,7 +491,7 @@ function openModalForAdd(dateStr) {
   }
 
   modalEl.style.display = "flex";
-}
+};
 
 // Edit Event Modal
 function openModalForEdit(eventsOnDate) {
@@ -485,7 +517,7 @@ function openModalForEdit(eventsOnDate) {
   }
 
   handleEventSelection(JSON.stringify(eventsOnDate[0]));
-}
+};
 
 // Edit Event TME Modal (Copy of above but changed so it can display info on TME extra modal event info popup)
 function openModalTMEForEdit(eventsOnDate, event) {
@@ -528,7 +560,7 @@ function handleEventSelection(eventJSON) {
   document.getElementById("endDate").value = event.end || "";
   document.getElementById("startTime").value = event.start_time || "";
   document.getElementById("endTime").value = event.end_time || "";
-}
+};
 
 // Add New Appointment
 function newAppointment() {
@@ -536,17 +568,17 @@ function newAppointment() {
     e.stopPropagation();
     openModalForAdd(dateStr);
   };
-}
+};
 
 // Close the Modal
 function closeModal() {
   modalEl.style.display = "none";
-}
+};
 
 // Close the TMEmodal
 function closeTME() {
   TMEmodal.style.display = "none";
-}
+};
 
 // Open miniNavMenu
 function openMiniNav() {
@@ -564,7 +596,7 @@ function openMiniNav() {
   miniNavArrow2.style.transform = "rotate(180deg)";
 
   Visibility = true;
-}
+};
 
 // Close miniNavMenu
 function closeMiniNav() {
@@ -580,7 +612,7 @@ function closeMiniNav() {
 
     Visibility = false;
   }, 50);
-}
+};
 
 // Update MiniNavigationModalVisibility om Visibility state correct te zetten
 function MiniNavigationModalVisibility() {
@@ -589,7 +621,7 @@ function MiniNavigationModalVisibility() {
   } else {
     closeMiniNav();
   }
-}
+};
 // Navigate Between dates
 function changeDates(offset) {
   if (currentCalendarView === "month") {
@@ -599,25 +631,25 @@ function changeDates(offset) {
   } else if (currentCalendarView === "day") {
     changeDay(offset)
   }
-}
+};
 
 // Navigate Between Days
 function changeDay(offset) {
   currentDate.setDate(currentDate.getDate() + offset);
   renderCalendar();
-}
+};
 
 // Navigate Between Weeks
 function changeWeek(offset) {
   currentDate.setDate(currentDate.getDate() + (7 * offset));
   renderCalendar();
-}
+};
 
 // Navigate Between Months
 function changeMonth(offset) {
   currentDate.setMonth(currentDate.getMonth() + offset);
   renderCalendar();
-}
+};
 
 // Run on Page Load
 renderCalendar();
