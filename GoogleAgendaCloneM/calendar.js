@@ -10,6 +10,8 @@ let miniNavTimeout;
 
 var currentCalendarView = null; // Possible values: "month", "week", "day"
 
+let resolvedOverlapConflicts = {}; // Keep track of events that overlap that are resolved
+
 if (sessionStorage.getItem("calendarView")) {
   currentCalendarView = sessionStorage.getItem("calendarView");
 } else {
@@ -209,7 +211,10 @@ function getEventPosition(startTime, endTime, dayStartHour = 0, dayEndHour = 24)
 
 // Generate Week Calendar View
 function renderWeekCalendar(date = new Date()) {
+  // Clears calendar and temp storages
   calendarEl.innerHTML = "";
+  resolvedOverlapConflicts = {};
+
   calendarEl.style.display = "flex";
   calendarEl.style.flexDirection = "row";
   calendarEl.style.height = "100%";
@@ -295,17 +300,25 @@ function renderWeekCalendar(date = new Date()) {
     // Filter events for this day
     const dayEvents = events.filter(e => e.date === dateStr);
 
+    // Count the number of events made
+
+    // Reset variabeles
+    let resizeCounter = 5;
+    var eventCounter = 1;
+    var zIndexCounter = "20";
+
     // Create events for the day
     dayEvents.forEach(event => {
       const position = getEventPosition(event.start_time, event.end_time);
-
+    
       const timeSlotEl = document.createElement("div"); // Creates timeslots
       timeSlotEl.className = "time-slot";
       timeSlotEl.style.position = "absolute";
       timeSlotEl.style.top = position.top;
       timeSlotEl.style.height = position.height;
-      timeSlotEl.style.width = "95%";
-      timeSlotEl.style.left = "5%";
+      timeSlotEl.style.width = "100%";
+      timeSlotEl.style.left = "0%";
+      timeSlotEl.style.zIndex = "20";
 
       const eventEl = document.createElement("div"); // Creates event element
       eventEl.className = "event-week";
@@ -319,13 +332,59 @@ function renderWeekCalendar(date = new Date()) {
 
       timeSlotEl.appendChild(eventEl);
       dayColumn.appendChild(timeSlotEl);
+
+      // More then one event created, will activate. Will fix overlap issues between overlapping events on the same time
+      if (eventCounter > 1) {
+        if (doTheyOverlap(dayEvents)) { // checks if there is overlap between events
+          const timeslotsList = dayColumn.querySelectorAll(".time-slot"); // list of all the currently created events in the dayColumn
+          for (let i = timeslotsList.length - timeslotsList.length; i < timeslotsList.length; i++) { // runs 2 times when length is 2, runs n times when lenght is n
+
+            const currentTop = parseFloat(timeSlotEl.style.top);
+            const loopTop = parseFloat(timeslotsList[i].style.top);
+            
+            if (currentTop < loopTop) { // If current element has higher top (lower number) than selected loop event, activate
+              timeslotsList[i].style.zIndex = parseInt(timeslotsList[i].style.zIndex) + 1
+
+              zIndexCounter = parseInt(zIndexCounter) + 1;
+
+
+              resolvedOverlapConflicts[String(eventEl.textContent) + String(timeslotsList[i].firstChild.textContent)] = "resolved" // Set the TWO toghether events on resolved state
+            
+            } else if (currentTop > loopTop) { // If current element has lower top (higher number) than selected loop event, activate
+              timeSlotEl.style.zIndex = zIndexCounter
+              
+              if (doTheyOverlap(dayEvents)) {
+                for (let h = timeslotsList.length - timeslotsList.length; h < timeslotsList.length; h++) {
+                    const currentTop1 = parseFloat(timeSlotEl.style.top);
+                    const loopTop1 = parseFloat(timeslotsList[h].style.top);
+                    console.log(timeSlotEl.textContent, timeslotsList[h].textContent)
+                  if (currentTop1 < loopTop1) {
+                    console.log("true")
+                    timeslotsList[h].style.zIndex = parseInt(timeSlotEl.style.zIndex) + 2
+
+
+                    resolvedOverlapConflicts[String(eventEl.textContent) + String(timeslotsList[i].firstChild.textContent)] = "resolved" // Set the TWO toghether events on resolved state
+                  }
+                }
+              }
+            }
+          };
+          // Apply resizing to event
+          timeSlotEl.style.left = parseInt(timeSlotEl.style.left) + resizeCounter + "%";
+          timeSlotEl.style.width = parseInt(timeSlotEl.style.width) - resizeCounter + "%";
+          resizeCounter += 5
+        }
+      }
+      eventCounter += 1
     });
 
-    /*if (dayEvents.length > 1) { // checks if more then 1 event on the same day
+    // checks if more then 1 event on the same day
+    /*if (dayEvents.length > 1) {
       if (doTheyOverlap(dayEvents)) { // checks if events have overlap on same time
+        
         for (let counter = 0; counter < dayEvents.length; counter++) {
-          //dayEvents[counter].style.backgroundColor = "red"; 
-          console.log(dayEvents[counter]);
+          
+          
         }
       }
     }*/
@@ -334,11 +393,9 @@ function renderWeekCalendar(date = new Date()) {
   // If week overlap from different month then it will display the months of sunday and saturday in the week in the header.
   let overlapFirstDay = new Date(date);
   overlapFirstDay.setDate((overlapFirstDay.getDate() - date.getDay())); // overlapFirstDay is Sunday
-  console.log(overlapFirstDay)
 
   let overlapLastDay = new Date(overlapFirstDay);
   overlapLastDay.setDate(overlapLastDay.getDate() + 6) // overlapLastDay is Saturday
-  console.log(overlapLastDay)
 
   if (yearOverlap) { // if year also changes in week, do same as monthOverlap but add year
     console.log("Week overlaps different year");
@@ -448,18 +505,12 @@ function renderDayCalendar(date = new Date()) {
     dayColumn.appendChild(timeSlotEl);
   });
 
-  /*if (dayEvents.length > 1) { // checks if more then 1 event on the same day
-    if (doTheyOverlap(dayEvents)) { // checks if events have overlap on same time
-      for (let counter = 0; counter < dayEvents.length; counter++) {
-        //dayEvents[counter].style.backgroundColor = "red"; 
-        console.log(dayEvents[counter]);
-      }
-    }
-  }*/
+  /*REPLACE ME WITH WEEK FUNCTION UPDATED CODE OVERLAP FIX*/
   calendarEl.appendChild(dayColumn);
 };
 
-/* function doTheyOverlap(dayEvents) { // checks if events on given day have overlap on same time
+// checks if events on given day have overlap on same time
+function doTheyOverlap(dayEvents) {
   let answer = false;
 
   for (let i = 0; i < dayEvents.length; i++) {
@@ -476,12 +527,15 @@ function renderDayCalendar(date = new Date()) {
         answer = true;
         break;
       }
+      if (resolvedOverlapConflicts[event1.title.split(" - ")[0] + event2.title.split(" - ")[0]] === "resolved") {
+        break
+      }
     }
     if (answer) break;
   }
 
   return answer;
-} */
+}
 
 function AddGeneralAppointment(e) { // Opens add appointment modal
   e.stopPropagation();
