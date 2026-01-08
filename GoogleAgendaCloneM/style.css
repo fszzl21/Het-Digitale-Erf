@@ -98,6 +98,7 @@ body {
   left: 45%;
   right: 45%;
   bottom: 100%;
+  padding: 0px 20px;
 }
 
 .today-day-marker {

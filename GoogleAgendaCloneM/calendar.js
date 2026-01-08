@@ -93,6 +93,15 @@ function renderMonthCalendar(date = new Date()) {
     dateEl.textContent = day;
     cell.appendChild(dateEl);
 
+    // Switch to selected day when dayHeader clicked
+    dateEl.addEventListener("click", (e) => {
+      e.stopPropagation();
+      let selectedDate = dateEl.textContent
+      currentDate.setDate(selectedDate);
+      switchCalendarView("day")
+      console.log(currentDate);
+    })
+
     // When day div is clicked, will open new event modal
     cell.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -274,6 +283,15 @@ function renderWeekCalendar(date = new Date()) {
       dayHeader.style.fontWeight = "bold";
     }
 
+    // Switch to selected day when dayHeader clicked
+    dayHeader.addEventListener("click", (e) => {
+      e.stopPropagation();
+      let selectedDate = dayHeader.textContent.split(" ")[1]
+      currentDate.setDate(selectedDate);
+      switchCalendarView("day")
+      console.log(currentDate);
+    })
+
     // Filter events for this day
     const dayEvents = events.filter(e => e.date === dateStr);
 
@@ -383,11 +401,10 @@ function renderDayCalendar(date = new Date()) {
     timeUnitColumnEl.appendChild(timeUnitEl);
   }
   // Makes the day column
-
-
   const dayColumn = document.createElement("div");
   dayColumn.className = "day-column";
 
+  // dayColumn click to add event function
   dayColumn.addEventListener("click", (e) => {
     e.stopPropagation();
     openModalForAdd(dateStr);
