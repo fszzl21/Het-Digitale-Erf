@@ -112,8 +112,17 @@ body {
   position: relative;
 }
 
-.day-column:hover {
-  cursor: pointer;
+.day-column::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(116, 116, 116, 0.075);
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+.day-column:hover::after {
+  opacity: 1;
 }
 
 .day-header {
