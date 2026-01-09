@@ -1,8 +1,9 @@
 :root {
   --primary: #AFE378;
-  --primary-light: #C8E7A8;
+  --primary-light: #c4f0b3;
   --primary-dark: #3A553E;
-  --background: #F9FaFB;
+  --background: #ebffd8;
+  --calendar-background: #ffff;
   --success: #d1fae5;
   --success-text: #065f46;
   --error: #fee2e2;
@@ -29,7 +30,7 @@ body {
   max-width: 90vw;
   height: 90vh;
   margin: 20px auto;
-  background-color: white;
+  background-color: var(--calendar-background);
   padding: 1.5rem;
   border-radius: 10px;
   display: flex;
@@ -103,7 +104,7 @@ body {
   display: flex;
   flex-direction: column;
 
-  border: 1px solid #cecece;
+  border: 1px solid #24242436;
   border-top: none;
   border-bottom: none;
   border-right: none;
@@ -173,7 +174,7 @@ body {
   height: 0.08rem;
   right: 0px;
 
-  background: #cecece;
+  background: #24242436;
 
   z-index: 10;
 }
