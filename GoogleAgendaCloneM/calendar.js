@@ -7,8 +7,11 @@ const realCurrentDay = new Date();
 let currentDate = new Date();
 let Visibility = true;
 let miniNavTimeout;
+let weekSwitch = false;
+let monthSwitch = false;
 
 var currentCalendarView = null; // Possible values: "month", "week", "day"
+var previousCurrentCalendarView = null; // Possible values: "month", "week", "day"
 
 let resolvedOverlapConflicts = {}; // Keep track of events that overlap that are resolved for week view
 let resolvedOverlapConflicts2 = {}; // Keep track of events that overlap that are resolved for day view
@@ -23,15 +26,25 @@ if (sessionStorage.getItem("calendarView")) {
 function renderCalendar() {
   if (currentCalendarView === "month") {
     renderMonthCalendar(currentDate);
+
   } else if (currentCalendarView === "week") {
+    if (previousCurrentCalendarView === "month" && monthSwitch == true) { // Activates only if previous view was month and has switched months | This makes the date auto begin each month so week and day start on month fresh
+    currentDate.setDate((currentDate.getDate() - currentDate.getDate()) + 1)}
     renderWeekCalendar(currentDate);
+
   } else if (currentCalendarView === "day") {
+    if (previousCurrentCalendarView === "month" && monthSwitch == true) { // Activates only if previous view was month and has switched months | This makes the date auto begin each month so week and day start on month fresh
+    currentDate.setDate((currentDate.getDate() - currentDate.getDate()) + 1)
+    } else if (previousCurrentCalendarView === "week" && weekSwitch == true) { // Activates only if previous view was week and has switched weeks
+      currentDate.setDate(currentDate.getDate() - currentDate.getDay()) // Sunday method, always a sunday
+    }
     renderDayCalendar(currentDate);
   }
 };
 
 // Switch to different calendar view
 function switchCalendarView(viewType) {
+  previousCurrentCalendarView = currentCalendarView;
   sessionStorage.setItem("calendarView", viewType);
   currentCalendarView = sessionStorage.getItem("calendarView");
   renderCalendar();
@@ -391,7 +404,7 @@ function renderWeekCalendar(date = new Date()) {
       overlapFirstDay.toLocaleDateString("nl-NL", {
         month: "long",
         year: "numeric", // <<<---
-      }) + " | " + overlapLastDay.toLocaleDateString("nl-NL", {
+      }) + " - " + overlapLastDay.toLocaleDateString("nl-NL", {
         month: "long",
         year: "numeric",
       });
@@ -401,7 +414,7 @@ function renderWeekCalendar(date = new Date()) {
     monthYearEl.textContent =
       overlapFirstDay.toLocaleDateString("nl-NL", {
         month: "long"
-      }) + " | " + overlapLastDay.toLocaleDateString("nl-NL", {
+      }) + " - " + overlapLastDay.toLocaleDateString("nl-NL", {
         month: "long",
         year: "numeric",
       });
@@ -429,7 +442,7 @@ function renderDayCalendar(date = new Date()) {
   monthYearEl.textContent = date.toLocaleDateString("nl-NL", {
     month: "long",
     year: "numeric",
-  }) + " | " + dateStr.split("-")[2] + " " + weekDays[dayDate.getDay()];
+  }) + " - " + dateStr.split("-")[2] + " " + weekDays[dayDate.getDay()];
 
   const timeUnitColumnEl = document.createElement("div");
   timeUnitColumnEl.className = "time-unit-column";
@@ -749,20 +762,25 @@ function changeDates(offset) {
 // Navigate Between Days
 function changeDay(offset) {
   currentDate.setDate(currentDate.getDate() + offset);
-  renderCalendar();
+  weekSwitch = false;
+  monthSwitch = false;
+  renderDayCalendar(currentDate);
 };
 
 // Navigate Between Weeks
 function changeWeek(offset) {
   currentDate.setDate(currentDate.getDate() + (7 * offset));
-  renderCalendar();
+  weekSwitch = true;
+  monthSwitch = false;
+  renderWeekCalendar(currentDate);
 };
 
 // Navigate Between Months
 function changeMonth(offset) {
   currentDate.setMonth(currentDate.getMonth() + offset);
-  renderCalendar();
+  monthSwitch = true;
+  renderMonthCalendar(currentDate);
 };
 
 // Run on Page Load
-renderCalendar();
+renderWeekCalendar(currentDate);
