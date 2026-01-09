@@ -468,7 +468,7 @@ function renderDayCalendar(date = new Date()) {
   const dayEvents = events.filter(e => e.date === dateStr);
 
   // Reset variabeles
-  let resizeCounter2 = 2.5;
+  let resizeCounter2 = 5;
   var eventCounter2 = 1;
   var zIndexCounter2 = "20";
 
@@ -537,7 +537,7 @@ function renderDayCalendar(date = new Date()) {
         // Apply resizing to event
         timeSlotEl.style.left = parseInt(timeSlotEl.style.left) + resizeCounter2 + "%";
         timeSlotEl.style.width = parseInt(timeSlotEl.style.width) - resizeCounter2 + "%";
-        resizeCounter2 += 2.5
+        resizeCounter2 += 5
       }
     }
     eventCounter2 += 1

@@ -1,7 +1,7 @@
 :root {
-  --primary: #3B82F6;
-  --primary-light: #DBEAFE;
-  --primary-dark: #1E3A8A;
+  --primary: #AFE378;
+  --primary-light: #C8E7A8;
+  --primary-dark: #3A553E;
   --background: #F9FaFB;
   --success: #d1fae5;
   --success-text: #065f46;
@@ -20,12 +20,13 @@ body {
   background-color: var(--background);
   color: #333;
   line-height: 1.6;
+  overflow: auto;
 }
 
 /* Calendar Contantion */
 
 .calendar {
-  max-width: 70vw;
+  max-width: 90vw;
   height: 90vh;
   margin: 20px auto;
   background-color: white;
@@ -35,6 +36,31 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 1500px) {
+  .calendar {
+    max-width: 85vw;
+  }
+}
+
+@media (max-width: 1200px) {
+  .calendar {
+    max-width: 95vw;
+  }
+}
+
+@media (max-width: 750px) {
+  .calendar {
+    min-width: 700px;
+    height: 100vh;
+  }
+}
+
+@media (max-height: 830px) {
+  .calendar {
+     height: 750px;
+  }
 }
 
 .nav-btn-container {
@@ -89,7 +115,7 @@ body {
   cursor: pointer;
 }
 
-.day-header { 
+.day-header {
   display: flex;
   background: rgba(0, 0, 0, 0);
   align-items: flex-start;
@@ -99,6 +125,19 @@ body {
   right: 45%;
   bottom: 100%;
   padding: 0px 20px;
+  font-size: 1.2rem;
+}
+
+@media (min-width: 280px) {
+  #monthYear {
+    font-size: calc(16px + 5 * ((100vw - 280px) / 400));
+  }
+}
+
+@media (min-width: 1300px) {
+  #monthYear {
+    font-size: 29px;
+  }
 }
 
 .today-day-marker {
@@ -111,6 +150,7 @@ body {
   border-radius: 50%;
   height: 63px;
 }
+
 .time-unit-column {
   height: 100%;
   display: flex;
@@ -121,6 +161,8 @@ body {
   display: flex;
   justify-content: flex-start;
 }
+
+
 
 .time-unit::before {
   content: "";
@@ -142,6 +184,7 @@ body {
 .day,
 .day-name {
   text-align: center;
+  font-size: 1.2rem;
 }
 
 
@@ -170,7 +213,7 @@ body {
 
 .date-number {
   font-weight: bold;
-  font-size: 0.8rem;
+  font-size: 1.2rem;
   margin-bottom: 5px;
 }
 
@@ -189,10 +232,11 @@ body {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.15s ease;
   overflow-x: clip;
+  word-break: break-word;
 
   z-index: 10;
-  right: 0px;
-  left: 0px;
+
+  font-size: 1.2rem;
 }
 
 .event-week {
@@ -210,11 +254,14 @@ body {
   box-shadow: 0 0px 4px rgba(0, 0, 0, 0.2);
   transition: transform 0.15s ease;
   overflow-x: clip;
+  word-break: break-word;
 
   z-index: 10;
   right: 5%;
   left: 0px;
   position: absolute;
+
+   font-size: 1.2rem;
 }
 
 .too-many-event {
@@ -229,9 +276,11 @@ body {
   flex-direction: column;
   align-items: flex-start;
   overflow-x: clip;
+   font-size: 1.2rem;
 }
 
-.event:hover, .event-week:hover {
+.event:hover,
+.event-week:hover {
   transform: scale(1.05);
 }
 
@@ -434,7 +483,7 @@ body {
 
 .miniNav {
   position: fixed;
-  bottom: 0%;
+  bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -449,6 +498,13 @@ body {
   transition: transform 0.2s ease;
 
   transform: translate(0, 60%);
+}
+
+@media (max-width: 1200px) {
+  .miniNav {
+    left: 5%;
+  right: 5%;
+  }
 }
 
 .miniNavContainer {
@@ -498,7 +554,7 @@ body {
   background-color: white;
   border: none;
   border-radius: 1rem;
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
@@ -509,6 +565,18 @@ body {
 .generalAddAppointment:hover {
   transform: scale(1.05);
   background-color: rgb(211, 211, 211);
+}
+
+@media (min-width: 280px) {
+  .generalAddAppointment {
+    font-size: calc(10px + 5 * ((100vw - 280px) / 400));
+  }
+}
+
+@media (min-width: 1200px) {
+  .generalAddAppointment {
+    font-size: 1.5rem;
+  }
 }
 
 #miniNavArrow1 {
@@ -529,6 +597,17 @@ body {
   cursor: pointer;
 }
 
+@media (max-width: 600px) {
+  #miniNavArrow1 {
+    width: 6vw;
+    height: auto;
+  }
+  #miniNavArrow2 {
+    width: 6vw;
+    height: auto;
+  }
+}
+
 .miniNavView {
   height: 80%;
   width: 25%;
@@ -538,10 +617,17 @@ body {
   font-size: 1rem;
   font-weight: bold;
   background-color: white;
+  word-break: break-word;
 
   cursor: pointer;
 
   transition: transform 0.15s ease, background 0.2s ease;
+}
+
+@media (max-width: 1200px) {
+  .miniNavView {
+    font-size: calc(10px + 5 * ((100vw - 280px) / 800));
+  }
 }
 
 .miniNavView:hover {
