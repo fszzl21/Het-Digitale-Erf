@@ -10,7 +10,8 @@ let miniNavTimeout;
 
 var currentCalendarView = null; // Possible values: "month", "week", "day"
 
-let resolvedOverlapConflicts = {}; // Keep track of events that overlap that are resolved
+let resolvedOverlapConflicts = {}; // Keep track of events that overlap that are resolved for week view
+let resolvedOverlapConflicts2 = {}; // Keep track of events that overlap that are resolved for day view
 
 if (sessionStorage.getItem("calendarView")) {
   currentCalendarView = sessionStorage.getItem("calendarView");
@@ -300,8 +301,6 @@ function renderWeekCalendar(date = new Date()) {
     // Filter events for this day
     const dayEvents = events.filter(e => e.date === dateStr);
 
-    // Count the number of events made
-
     // Reset variabeles
     let resizeCounter = 5;
     var eventCounter = 1;
@@ -310,7 +309,7 @@ function renderWeekCalendar(date = new Date()) {
     // Create events for the day
     dayEvents.forEach(event => {
       const position = getEventPosition(event.start_time, event.end_time);
-    
+
       const timeSlotEl = document.createElement("div"); // Creates timeslots
       timeSlotEl.className = "time-slot";
       timeSlotEl.style.position = "absolute";
@@ -341,7 +340,7 @@ function renderWeekCalendar(date = new Date()) {
 
             const currentTop = parseFloat(timeSlotEl.style.top);
             const loopTop = parseFloat(timeslotsList[i].style.top);
-            
+
             if (currentTop < loopTop) { // If current element has higher top (lower number) than selected loop event, activate
               timeslotsList[i].style.zIndex = parseInt(timeslotsList[i].style.zIndex) + 1
 
@@ -349,15 +348,15 @@ function renderWeekCalendar(date = new Date()) {
 
 
               resolvedOverlapConflicts[String(eventEl.textContent) + String(timeslotsList[i].firstChild.textContent)] = "resolved" // Set the TWO toghether events on resolved state
-            
+
             } else if (currentTop > loopTop) { // If current element has lower top (higher number) than selected loop event, activate
               timeSlotEl.style.zIndex = zIndexCounter
-              
+
               if (doTheyOverlap(dayEvents)) {
                 for (let h = timeslotsList.length - timeslotsList.length; h < timeslotsList.length; h++) {
-                    const currentTop1 = parseFloat(timeSlotEl.style.top);
-                    const loopTop1 = parseFloat(timeslotsList[h].style.top);
-                    console.log(timeSlotEl.textContent, timeslotsList[h].textContent)
+                  const currentTop1 = parseFloat(timeSlotEl.style.top);
+                  const loopTop1 = parseFloat(timeslotsList[h].style.top);
+                  console.log(timeSlotEl.textContent, timeslotsList[h].textContent)
                   if (currentTop1 < loopTop1) {
                     console.log("true")
                     timeslotsList[h].style.zIndex = parseInt(timeSlotEl.style.zIndex) + 2
@@ -377,17 +376,6 @@ function renderWeekCalendar(date = new Date()) {
       }
       eventCounter += 1
     });
-
-    // checks if more then 1 event on the same day
-    /*if (dayEvents.length > 1) {
-      if (doTheyOverlap(dayEvents)) { // checks if events have overlap on same time
-        
-        for (let counter = 0; counter < dayEvents.length; counter++) {
-          
-          
-        }
-      }
-    }*/
     calendarEl.appendChild(dayColumn);
   }
   // If week overlap from different month then it will display the months of sunday and saturday in the week in the header.
@@ -479,6 +467,11 @@ function renderDayCalendar(date = new Date()) {
   // Filter events for this day
   const dayEvents = events.filter(e => e.date === dateStr);
 
+  // Reset variabeles
+  let resizeCounter2 = 2.5;
+  var eventCounter2 = 1;
+  var zIndexCounter2 = "20";
+
   // Create events for the day
   dayEvents.forEach(event => {
     const position = getEventPosition(event.start_time, event.end_time);
@@ -488,8 +481,9 @@ function renderDayCalendar(date = new Date()) {
     timeSlotEl.style.position = "absolute";
     timeSlotEl.style.top = position.top;
     timeSlotEl.style.height = position.height;
-    timeSlotEl.style.width = "95%";
-    timeSlotEl.style.left = "5%";
+    timeSlotEl.style.width = "100%";
+    timeSlotEl.style.left = "0%";
+    timeSlotEl.style.zIndex = "20";
 
     const eventEl = document.createElement("div"); // Creates event element
     eventEl.className = "event-week";
@@ -503,11 +497,53 @@ function renderDayCalendar(date = new Date()) {
 
     timeSlotEl.appendChild(eventEl);
     dayColumn.appendChild(timeSlotEl);
-  });
 
-  /*REPLACE ME WITH WEEK FUNCTION UPDATED CODE OVERLAP FIX*/
+    // More then one event created, will activate. Will fix overlap issues between overlapping events on the same time
+    if (eventCounter2 > 1) {
+      if (doTheyOverlap(dayEvents)) { // checks if there is overlap between events
+        const timeslotsList = dayColumn.querySelectorAll(".time-slot"); // list of all the currently created events in the dayColumn
+        for (let i = timeslotsList.length - timeslotsList.length; i < timeslotsList.length; i++) { // runs 2 times when length is 2, runs n times when lenght is n
+
+          const currentTop = parseFloat(timeSlotEl.style.top);
+          const loopTop = parseFloat(timeslotsList[i].style.top);
+
+          if (currentTop < loopTop) { // If current element has higher top (lower number) than selected loop event, activate
+            timeslotsList[i].style.zIndex = parseInt(timeslotsList[i].style.zIndex) + 1
+
+            zIndexCounter2 = parseInt(zIndexCounter2) + 1;
+
+
+            resolvedOverlapConflicts2[String(eventEl.textContent) + String(timeslotsList[i].firstChild.textContent)] = "resolved" // Set the TWO toghether events on resolved state
+
+          } else if (currentTop > loopTop) { // If current element has lower top (higher number) than selected loop event, activate
+            timeSlotEl.style.zIndex = zIndexCounter2
+
+            if (doTheyOverlap(dayEvents)) {
+              for (let h = timeslotsList.length - timeslotsList.length; h < timeslotsList.length; h++) {
+                const currentTop1 = parseFloat(timeSlotEl.style.top);
+                const loopTop1 = parseFloat(timeslotsList[h].style.top);
+                console.log(timeSlotEl.textContent, timeslotsList[h].textContent)
+                if (currentTop1 < loopTop1) {
+                  console.log("true")
+                  timeslotsList[h].style.zIndex = parseInt(timeSlotEl.style.zIndex) + 2
+
+
+                  resolvedOverlapConflicts2[String(eventEl.textContent) + String(timeslotsList[i].firstChild.textContent)] = "resolved" // Set the TWO toghether events on resolved state
+                }
+              }
+            }
+          }
+        };
+        // Apply resizing to event
+        timeSlotEl.style.left = parseInt(timeSlotEl.style.left) + resizeCounter2 + "%";
+        timeSlotEl.style.width = parseInt(timeSlotEl.style.width) - resizeCounter2 + "%";
+        resizeCounter2 += 2.5
+      }
+    }
+    eventCounter2 += 1
+  });
   calendarEl.appendChild(dayColumn);
-};
+}
 
 // checks if events on given day have overlap on same time
 function doTheyOverlap(dayEvents) {
@@ -527,8 +563,14 @@ function doTheyOverlap(dayEvents) {
         answer = true;
         break;
       }
-      if (resolvedOverlapConflicts[event1.title.split(" - ")[0] + event2.title.split(" - ")[0]] === "resolved") {
-        break
+      if (currentCalendarView === "week") {
+        if (resolvedOverlapConflicts[event1.title.split(" - ")[0] + event2.title.split(" - ")[0]] === "resolved") {
+          break
+        }
+      } else if (currentCalendarView === "day") {
+        if (resolvedOverlapConflicts2[event1.title.split(" - ")[0] + event2.title.split(" - ")[0]] === "resolved") {
+          break
+        }
       }
     }
     if (answer) break;
