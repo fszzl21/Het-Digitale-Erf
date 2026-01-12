@@ -4,11 +4,27 @@ const modalEl = document.getElementById("eventModal");
 const TMEmodal = document.getElementById("TMEmodal"); // TME stands for TooManyEvents
 const TMEel = document.getElementById("TMEContainer");
 const realCurrentDay = new Date();
+
+monthYearEl.addEventListener("click", (e) => { // Click on monthYearEl to go back to current date
+    e.stopPropagation();
+    backToCurrentDate();
+  })
+
 let currentDate = new Date();
 let Visibility = true;
 let miniNavTimeout;
 let weekSwitch = false;
 let monthSwitch = false;
+
+let debounce = false;
+
+let currentSessionDate = null;
+
+function updateCurrentSessionDate() { // This will store the previous currentDate when currentDate changes
+  sessionStorage.setItem("currentSessionDate", currentDate);
+  currentSessionDate = sessionStorage.getItem("currentSessionDate");
+  console.log("updated currentDate...", currentSessionDate);
+}
 
 var currentCalendarView = null; // Possible values: "month", "week", "day"
 var previousCurrentCalendarView = null; // Possible values: "month", "week", "day"
@@ -29,18 +45,32 @@ function renderCalendar() {
 
   } else if (currentCalendarView === "week") {
     if (previousCurrentCalendarView === "month" && monthSwitch == true) { // Activates only if previous view was month and has switched months | This makes the date auto begin each month so week and day start on month fresh
-    currentDate.setDate((currentDate.getDate() - currentDate.getDate()) + 1)}
+      currentDate.setDate((currentDate.getDate() - currentDate.getDate()) + 1)
+      updateCurrentSessionDate()
+    }
     renderWeekCalendar(currentDate);
 
   } else if (currentCalendarView === "day") {
     if (previousCurrentCalendarView === "month" && monthSwitch == true) { // Activates only if previous view was month and has switched months | This makes the date auto begin each month so week and day start on month fresh
-    currentDate.setDate((currentDate.getDate() - currentDate.getDate()) + 1)
+      currentDate.setDate((currentDate.getDate() - currentDate.getDate()) + 1)
+      updateCurrentSessionDate()
     } else if (previousCurrentCalendarView === "week" && weekSwitch == true) { // Activates only if previous view was week and has switched weeks
       currentDate.setDate(currentDate.getDate() - currentDate.getDay()) // Sunday method, always a sunday
+      updateCurrentSessionDate()
     }
     renderDayCalendar(currentDate);
   }
+  debounce = false;
 };
+
+function backToCurrentDate() {
+  if (debounce) {return}
+  debounce = true;
+  currentDate = new Date();
+  updateCurrentSessionDate()
+  renderCalendar();
+}
+
 
 // Switch to different calendar view
 function switchCalendarView(viewType) {
@@ -114,6 +144,7 @@ function renderMonthCalendar(date = new Date()) {
       e.stopPropagation();
       let selectedDate = dateEl.textContent
       currentDate.setDate(selectedDate);
+      updateCurrentSessionDate()
       switchCalendarView("day")
       console.log(currentDate);
     })
@@ -306,6 +337,7 @@ function renderWeekCalendar(date = new Date()) {
     dayHeader.addEventListener("click", (e) => {
       e.stopPropagation();
       let selectedDate = dayHeader.textContent.split(" ")[1]
+      updateCurrentSessionDate()
       currentDate.setDate(selectedDate);
       switchCalendarView("day")
       console.log(currentDate);
@@ -762,6 +794,7 @@ function changeDates(offset) {
 // Navigate Between Days
 function changeDay(offset) {
   currentDate.setDate(currentDate.getDate() + offset);
+  updateCurrentSessionDate()
   weekSwitch = false;
   monthSwitch = false;
   renderDayCalendar(currentDate);
@@ -770,6 +803,7 @@ function changeDay(offset) {
 // Navigate Between Weeks
 function changeWeek(offset) {
   currentDate.setDate(currentDate.getDate() + (7 * offset));
+  updateCurrentSessionDate()
   weekSwitch = true;
   monthSwitch = false;
   renderWeekCalendar(currentDate);
@@ -778,9 +812,24 @@ function changeWeek(offset) {
 // Navigate Between Months
 function changeMonth(offset) {
   currentDate.setMonth(currentDate.getMonth() + offset);
+  updateCurrentSessionDate()
   monthSwitch = true;
   renderMonthCalendar(currentDate);
 };
 
 // Run on Page Load
-renderWeekCalendar(currentDate);
+// If first time user visits page, set on default week view else render last used view
+if (!sessionStorage.getItem("visitedBefore")) {
+  renderWeekCalendar(currentDate);
+  sessionStorage.setItem("visitedBefore", true);
+} else {
+  const storedDate = sessionStorage.getItem("currentSessionDate");
+
+  if (storedDate) { // check if value is truthy then execute the statement
+    currentDate = new Date(storedDate);
+  }
+
+  renderCalendar();
+}
+
+

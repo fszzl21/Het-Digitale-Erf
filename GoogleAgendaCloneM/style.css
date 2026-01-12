@@ -150,6 +150,10 @@ body {
   }
 }
 
+#monthYear:hover {
+  cursor: pointer;
+}
+
 .today-day-marker {
   position: absolute;
   left: 20%;
