@@ -112,3 +112,79 @@ if __name__ == "__main__":
     print("\n--- START TEST HR ---")
     print(registreer_uren("EMP01", 8.5, "Administratie Module"))
     print(vraag_vakantie_aan("EMP01", 16.0))
+
+# --- API EXPORTS & FACTUREN ---
+
+from services.exports.excel_export import export_to_excel
+from services.exports.pdf_export import export_to_pdf
+from services.factuur_manager import FactuurManager
+
+factuur_manager = FactuurManager()
+
+def exporteer_kosten_overzicht(type: str, pad: str):
+    """
+    Exporteert het Winst & Verlies overzicht (Kosten/Omzet).
+    """
+    try:
+        # Haal data op via bestaande logica
+        saldi = verwerking._grootboek_saldi
+        wv_data = rapportage.genereer_winst_verlies(saldi)
+        
+        # Data plat slaan voor export
+        export_data = [
+            {"Post": "Omzet", "Bedrag": str(wv_data["omzet"])},
+            {"Post": "Kosten", "Bedrag": str(wv_data["kosten"])},
+            {"Post": "Resultaat", "Bedrag": str(wv_data["resultaat"])}
+        ]
+        
+        if type.lower() == 'excel':
+            file_path = export_to_excel(export_data, pad)
+        elif type.lower() == 'pdf':
+            file_path = export_to_pdf("Winst & Verlies", export_data, pad)
+        else:
+            return {"status": "error", "msg": "Type moet 'excel' of 'pdf' zijn"}
+            
+        return {"status": "success", "msg": f"Export opgeslagen: {file_path}"}
+    except Exception as e:
+        return {"status": "error", "msg": str(e)}
+
+def exporteer_uren_overzicht(type: str, pad: str):
+    """
+    Exporteert alle geregistreerde uren.
+    """
+    try:
+        # Haal data uit HR systeem
+        uren_lijst = hr_systeem.uren_db
+        
+        # Data vertalen naar list of dicts
+        data = [
+            {
+                "Medewerker": u.medewerker_id,
+                "Datum": u.datum,
+                "Project": u.project_code,
+                "Uren": str(u.aantal_uren),
+                "Omschrijving": u.omschrijving
+            }
+            for u in uren_lijst
+        ]
+        
+        if type.lower() == 'excel':
+            file_path = export_to_excel(data, pad)
+        elif type.lower() == 'pdf':
+            file_path = export_to_pdf("Uren Overzicht", data, pad)
+        else:
+            return {"status": "error", "msg": "Type moet 'excel' of 'pdf' zijn"}
+
+        return {"status": "success", "msg": f"Export opgeslagen: {file_path}"}
+    except Exception as e:
+        return {"status": "error", "msg": str(e)}
+
+def upload_factuur(bron_pad: str, omschrijving: str):
+    """
+    Slaat een ontvangen factuur op.
+    """
+    try:
+        factuur = factuur_manager.ontvang_factuur(bron_pad, omschrijving)
+        return {"status": "success", "msg": f"Factuur {factuur.id} opgeslagen."}
+    except Exception as e:
+        return {"status": "error", "msg": str(e)}

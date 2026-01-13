@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.DS_Store
+test_rapporten/
+demo_rapporten/
+facturen/*
+!facturen/.gitkeep
