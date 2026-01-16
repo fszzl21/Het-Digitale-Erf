@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 
-export type ColorScheme = 'default' | 'protanopia' | 'deuteranopia' | 'tritanopia' | 'high-contrast';
+export type ColorScheme = 'default' | 'protanopia' | 'deuteranopia' | 'tritanopia';
 
 interface ColorSchemeToggleProps {
   onSchemeChange?: (scheme: ColorScheme) => void;
@@ -32,10 +32,6 @@ const colorSchemes = {
     label: 'Tritanopie',
     description: 'Blauw-geel kleurenblind',
   },
-  'high-contrast': {
-    label: 'Hoog Contrast',
-    description: 'Extra contrast voor lage visie',
-  },
 };
 
 export function ColorSchemeToggle({ onSchemeChange }: ColorSchemeToggleProps) {
@@ -54,8 +50,7 @@ export function ColorSchemeToggle({ onSchemeChange }: ColorSchemeToggleProps) {
     document.documentElement.classList.remove(
       'scheme-protanopia',
       'scheme-deuteranopia',
-      'scheme-tritanopia',
-      'scheme-high-contrast'
+      'scheme-tritanopia'
     );
 
     // Voeg nieuwe class toe (behalve voor default)
@@ -92,9 +87,8 @@ export function ColorSchemeToggle({ onSchemeChange }: ColorSchemeToggleProps) {
           >
             <div className="flex items-center gap-2 w-full">
               <div
-                className={`w-2 h-2 rounded-full ${
-                  currentScheme === key ? 'bg-green-600' : 'bg-gray-300'
-                }`}
+                className={`w-2 h-2 rounded-full ${currentScheme === key ? 'bg-green-600' : 'bg-gray-300'
+                  }`}
               />
               <span>{label}</span>
             </div>

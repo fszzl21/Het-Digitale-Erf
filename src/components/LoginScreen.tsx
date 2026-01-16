@@ -21,7 +21,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
             <Tent className="w-8 h-8 text-green-700" />
           </div>
-          <h1 className="text-gray-900 mb-2">Het Digital Erf</h1>
+          <h1 className="text-gray-900 mb-2">Het Digitale Erf</h1>
           <p className="text-gray-600">Camping Management Systeem</p>
         </div>
 
@@ -69,17 +69,6 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             Inloggen
           </button>
         </form>
-
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-500 mb-2">
-            Demo: gebruik een willekeurige gebruikersnaam en wachtwoord
-          </p>
-          <div className="text-xs text-gray-400 space-y-1">
-            <p>💡 Tip: gebruik 'admin' voor Beheerder rol</p>
-            <p>💡 Tip: gebruik 'manager' voor Manager rol</p>
-            <p>💡 Anders krijg je Medewerker rol</p>
-          </div>
-        </div>
       </div>
     </div>
   );

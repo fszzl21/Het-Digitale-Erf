@@ -55,7 +55,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
             <BookOpen className="w-8 h-8" />
             <div>
               <h2 className="text-white">Dashboard Handleiding</h2>
-              <p className="text-green-100 text-sm">Het Digital Erf - Camping Management</p>
+              <p className="text-green-100 text-sm">Het Digitale Erf - Camping Management</p>
             </div>
           </div>
           <button

@@ -19,7 +19,7 @@ export const Header = memo(function Header({ user, onLogout, onOpenHelp }: Heade
               <Tent className="w-6 h-6 text-green-700" />
             </div>
             <div>
-              <h1 className="text-gray-900">Het Digital Erf</h1>
+              <h1 className="text-gray-900">Het Digitale Erf</h1>
               <p className="text-xs text-gray-500">Camping Dashboard</p>
             </div>
           </div>

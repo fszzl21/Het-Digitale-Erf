@@ -41,6 +41,7 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* Dark mode via class (handmatig of extern) */
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -76,6 +77,130 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
+}
+
+/* Automatische dark mode op basis van systeem voorkeur */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.145 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.145 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.985 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.396 0.141 25.723);
+    --destructive-foreground: oklch(0.637 0.237 25.331);
+    --border: oklch(0.269 0 0);
+    --input: oklch(0.269 0 0);
+    --input-background: oklch(0.2 0 0);
+    --switch-background: oklch(0.35 0 0);
+    --ring: oklch(0.439 0 0);
+    --font-weight-medium: 500;
+    --font-weight-normal: 400;
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(0.269 0 0);
+    --sidebar-ring: oklch(0.439 0 0);
+  }
+
+  /* Dark mode overrides voor hardcoded Tailwind classes */
+  .bg-white {
+    background-color: #1a1a1a !important;
+  }
+
+  .bg-gray-50 {
+    background-color: #0f0f0f !important;
+  }
+
+  .bg-gray-100 {
+    background-color: #1a1a1a !important;
+  }
+
+  .text-gray-900 {
+    color: #f5f5f5 !important;
+  }
+
+  .text-gray-800 {
+    color: #e5e5e5 !important;
+  }
+
+  .text-gray-700 {
+    color: #d4d4d4 !important;
+  }
+
+  .text-gray-600 {
+    color: #a3a3a3 !important;
+  }
+
+  .text-gray-500 {
+    color: #737373 !important;
+  }
+
+  .border-gray-100 {
+    border-color: #2a2a2a !important;
+  }
+
+  .border-gray-200 {
+    border-color: #333333 !important;
+  }
+
+  .border-gray-300 {
+    border-color: #404040 !important;
+  }
+
+  .hover\:bg-gray-50:hover {
+    background-color: #252525 !important;
+  }
+
+  .hover\:bg-gray-100:hover {
+    background-color: #2a2a2a !important;
+  }
+
+  .shadow-sm {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
+  }
+
+  .shadow-xl {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2) !important;
+  }
+
+  .shadow-2xl {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  /* Login pagina achtergrond gradient in dark mode */
+  .from-green-50 {
+    --tw-gradient-from: #0a1a0f !important;
+  }
+
+  .to-blue-50 {
+    --tw-gradient-to: #0a0f1a !important;
+  }
+
+  .bg-gradient-to-br {
+    background: linear-gradient(to bottom right, #0a1a0f, #0a0f1a) !important;
+  }
+
+  .bg-green-100 {
+    background-color: #1a3a25 !important;
+  }
 }
 
 @theme inline {

@@ -2,7 +2,7 @@ export const API_URL = 'http://localhost:8000/api';
 
 export interface User {
     username: string;
-    role: 'Beheerder' | 'Manager' | 'Medewerker';
+    role: 'Beheerder' | 'Manager' | 'Medewerker' | 'admin' | 'manager' | 'medewerker';
     token: string;
 }
 

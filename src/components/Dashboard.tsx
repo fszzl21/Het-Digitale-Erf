@@ -14,7 +14,7 @@ import { HelpModal } from './HelpModal';
 import { Shield } from 'lucide-react';
 
 interface DashboardProps {
-  user: { name: string; role: string } | null;
+  user: { username: string; role: string; token?: string } | null;
   onLogout: () => void;
 }
 
