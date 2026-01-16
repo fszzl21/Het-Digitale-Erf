@@ -1,0 +1,51 @@
+Database initialization complete.
+Registering route: POST ^/api/auth/login$
+Registering route: POST ^/api/auth/logout$
+Registering route: GET ^/api/reservations$
+Registering route: POST ^/api/reservations$
+Registering route: PUT ^/api/reservations/(\d+)$
+Registering route: DELETE ^/api/reservations/(\d+)$
+Registering route: GET ^/api/occupancy$
+Registering route: PUT ^/api/occupancy/(\d+)$
+Registering route: GET ^/api/guests$
+Registering route: POST ^/api/guests$
+Registering route: PUT ^/api/guests/(\d+)$
+Registering route: DELETE ^/api/guests/(\d+)$
+Registering route: GET ^/api/tasks$
+Registering route: POST ^/api/tasks$
+Registering route: PUT ^/api/tasks/(\d+)$
+Registering route: DELETE ^/api/tasks/(\d+)$
+Registering route: GET ^/api/absences$
+Registering route: POST ^/api/absences$
+Registering route: PUT ^/api/absences/(\d+)$
+Registering route: DELETE ^/api/absences/(\d+)$
+Registering route: GET ^/api/activities$
+Registering route: POST ^/api/activities$
+Registering route: PUT ^/api/activities/(\d+)$
+Registering route: DELETE ^/api/activities/(\d+)$
+Registering route: GET ^/api/admin/employees$
+Registering route: POST ^/api/admin/employees$
+Registering route: GET ^/api/admin/leave$
+Registering route: POST ^/api/admin/leave$
+Registering route: POST ^/api/admin/leave/([^/]+)/approve$
+Registering route: GET ^/api/admin/ledger$
+Registering route: GET ^/api/admin/bookings$
+Registering route: POST ^/api/admin/bookings$
+Registering route: GET ^/api/admin/reports$
+Registering route: GET ^/api/admin/calendar$
+Registering route: POST ^/api/admin/calendar$
+Registering route: PUT ^/api/admin/calendar/(\d+)$
+Registering route: DELETE ^/api/admin/calendar/(\d+)$
+Starting server on http://localhost:8000
+Traceback (most recent call last):
+  File "/Users/wessel/Desktop/School/Jaar 1/School Project 3/Het-Digitale-Erf-Inlog-Main-page/backend/server.py", line 88, in <module>
+    run()
+  File "/Users/wessel/Desktop/School/Jaar 1/School Project 3/Het-Digitale-Erf-Inlog-Main-page/backend/server.py", line 80, in run
+    server = http.server.ThreadingHTTPServer(('', PORT), CustomRequestHandler)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 452, in __init__
+    self.server_bind()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 138, in server_bind
+    socketserver.TCPServer.server_bind(self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 466, in server_bind
+    self.socket.bind(self.server_address)
+OSError: [Errno 48] Address already in use

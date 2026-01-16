@@ -1,0 +1,434 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #020817;
+    /* oklch(0.145 0 0) converted roughly or just standard shadcn values */
+    --card: #ffffff;
+    --card-foreground: #020817;
+    --popover: #ffffff;
+    --popover-foreground: #020817;
+    --primary: #0f172a;
+    /* #030213 */
+    --primary-foreground: #f8fafc;
+    /* oklch(1 0 0) */
+    --secondary: #f1f5f9;
+    --secondary-foreground: #0f172a;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+    --accent: #f1f5f9;
+    --accent-foreground: #0f172a;
+    --destructive: #ef4444;
+    --destructive-foreground: #f8fafc;
+    --border: #e2e8f0;
+    --input: #e2e8f0;
+    --ring: #0f172a;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: #020817;
+    /* oklch(0.145 0 0) approx */
+    --foreground: #f8fafc;
+    /* oklch(0.985 0 0) */
+    --card: #020817;
+    --card-foreground: #f8fafc;
+    --popover: #020817;
+    --popover-foreground: #f8fafc;
+    --primary: #f8fafc;
+    --primary-foreground: #0f172a;
+    --secondary: #1e293b;
+    --secondary-foreground: #f8fafc;
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+    --accent: #1e293b;
+    --accent-foreground: #f8fafc;
+    --destructive: #7f1d1d;
+    --destructive-foreground: #f8fafc;
+    --border: #1e293b;
+    --input: #1e293b;
+    --ring: #cbd5e1;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Custom scrollbar styling for dark mode compatibility */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+  }
+
+  .dark ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: #475569;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+  }
+
+  /* Hide horizontal scrollbar specifically */
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  /* Firefox scrollbar support */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #94a3b8 transparent;
+  }
+
+  .dark * {
+    scrollbar-color: #475569 transparent;
+  }
+}
+
+/* Utility to hide horizontal scrollbar completely */
+.hide-scrollbar-x::-webkit-scrollbar:horizontal {
+  display: none;
+  height: 0;
+}
+
+.hide-scrollbar-x {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Kleurenschema's voor Kleurenblindheid */
+/* Protanopia (Rood-groen kleurenblind - rood) */
+.scheme-protanopia {
+  --primary: #1a5490;
+  --chart-1: oklch(0.6 0.15 220);
+  --chart-2: oklch(0.7 0.12 260);
+  --chart-3: oklch(0.5 0.1 200);
+  --chart-4: oklch(0.75 0.14 240);
+  --chart-5: oklch(0.65 0.13 210);
+}
+
+.scheme-protanopia .bg-green-100 {
+  background-color: #dbeafe !important;
+}
+
+.scheme-protanopia .text-green-700 {
+  color: #1e40af !important;
+}
+
+.scheme-protanopia .bg-green-600 {
+  background-color: #2563eb !important;
+}
+
+.scheme-protanopia .text-green-600 {
+  color: #2563eb !important;
+}
+
+.scheme-protanopia .bg-green-700 {
+  background-color: #1e40af !important;
+}
+
+.scheme-protanopia .hover\:bg-green-700:hover {
+  background-color: #1e40af !important;
+}
+
+.scheme-protanopia .hover\:bg-green-800:hover {
+  background-color: #1e3a8a !important;
+}
+
+.scheme-protanopia .hover\:bg-green-50:hover {
+  background-color: #eff6ff !important;
+}
+
+.scheme-protanopia .border-green-700 {
+  border-color: #1e40af !important;
+}
+
+.scheme-protanopia .from-green-700 {
+  --tw-gradient-from: #1e40af !important;
+}
+
+.scheme-protanopia .to-green-600 {
+  --tw-gradient-to: #2563eb !important;
+}
+
+/* Deuteranopia (Rood-groen kleurenblind - groen) */
+.scheme-deuteranopia {
+  --primary: #8b5a00;
+  --chart-1: oklch(0.65 0.18 80);
+  --chart-2: oklch(0.6 0.2 60);
+  --chart-3: oklch(0.55 0.16 90);
+  --chart-4: oklch(0.7 0.19 70);
+  --chart-5: oklch(0.62 0.17 85);
+}
+
+.scheme-deuteranopia .bg-green-100 {
+  background-color: #fef3c7 !important;
+}
+
+.scheme-deuteranopia .text-green-700 {
+  color: #92400e !important;
+}
+
+.scheme-deuteranopia .bg-green-600 {
+  background-color: #d97706 !important;
+}
+
+.scheme-deuteranopia .text-green-600 {
+  color: #d97706 !important;
+}
+
+.scheme-deuteranopia .bg-green-700 {
+  background-color: #92400e !important;
+}
+
+.scheme-deuteranopia .hover\:bg-green-700:hover {
+  background-color: #92400e !important;
+}
+
+.scheme-deuteranopia .hover\:bg-green-800:hover {
+  background-color: #78350f !important;
+}
+
+.scheme-deuteranopia .hover\:bg-green-50:hover {
+  background-color: #fffbeb !important;
+}
+
+.scheme-deuteranopia .border-green-700 {
+  border-color: #92400e !important;
+}
+
+.scheme-deuteranopia .from-green-700 {
+  --tw-gradient-from: #92400e !important;
+}
+
+.scheme-deuteranopia .to-green-600 {
+  --tw-gradient-to: #d97706 !important;
+}
+
+/* Tritanopia (Blauw-geel kleurenblind) */
+.scheme-tritanopia {
+  --primary: #be185d;
+  --chart-1: oklch(0.6 0.2 340);
+  --chart-2: oklch(0.65 0.18 350);
+  --chart-3: oklch(0.55 0.22 330);
+  --chart-4: oklch(0.7 0.19 345);
+  --chart-5: oklch(0.62 0.21 335);
+}
+
+.scheme-tritanopia .bg-green-100 {
+  background-color: #fce7f3 !important;
+}
+
+.scheme-tritanopia .text-green-700 {
+  color: #9f1239 !important;
+}
+
+.scheme-tritanopia .bg-green-600 {
+  background-color: #db2777 !important;
+}
+
+.scheme-tritanopia .text-green-600 {
+  color: #db2777 !important;
+}
+
+.scheme-tritanopia .bg-green-700 {
+  background-color: #9f1239 !important;
+}
+
+.scheme-tritanopia .hover\:bg-green-700:hover {
+  background-color: #9f1239 !important;
+}
+
+.scheme-tritanopia .hover\:bg-green-800:hover {
+  background-color: #881337 !important;
+}
+
+.scheme-tritanopia .hover\:bg-green-50:hover {
+  background-color: #fdf2f8 !important;
+}
+
+.scheme-tritanopia .border-green-700 {
+  border-color: #9f1239 !important;
+}
+
+.scheme-tritanopia .from-green-700 {
+  --tw-gradient-from: #9f1239 !important;
+}
+
+.scheme-tritanopia .to-green-600 {
+  --tw-gradient-to: #db2777 !important;
+}
+
+/* Hoog Contrast */
+.scheme-high-contrast {
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #1a1a1a;
+  --card-foreground: #ffffff;
+  --primary: #ffff00;
+  --primary-foreground: #000000;
+  --secondary: #ffffff;
+  --secondary-foreground: #000000;
+  --muted: #333333;
+  --muted-foreground: #ffffff;
+  --accent: #ffff00;
+  --accent-foreground: #000000;
+  --border: #ffffff;
+  --input: #ffffff;
+  --ring: #ffff00;
+  --chart-1: #ffff00;
+  --chart-2: #00ffff;
+  --chart-3: #ff00ff;
+  --chart-4: #00ff00;
+  --chart-5: #ff0000;
+}
+
+.scheme-high-contrast .bg-white {
+  background-color: #000000 !important;
+}
+
+.scheme-high-contrast .text-gray-900,
+.scheme-high-contrast .text-gray-700,
+.scheme-high-contrast .text-gray-600 {
+  color: #ffffff !important;
+}
+
+.scheme-high-contrast .text-gray-500 {
+  color: #ffff00 !important;
+}
+
+.scheme-high-contrast .bg-green-100 {
+  background-color: #ffff00 !important;
+}
+
+.scheme-high-contrast .text-green-700 {
+  color: #000000 !important;
+}
+
+.scheme-high-contrast .bg-green-600 {
+  background-color: #ffff00 !important;
+}
+
+.scheme-high-contrast .text-green-600 {
+  color: #ffff00 !important;
+}
+
+.scheme-high-contrast .bg-green-700 {
+  background-color: #ffff00 !important;
+}
+
+.scheme-high-contrast .hover\:bg-green-700:hover {
+  background-color: #ffff00 !important;
+}
+
+.scheme-high-contrast .hover\:bg-green-800:hover {
+  background-color: #cccc00 !important;
+}
+
+.scheme-high-contrast .hover\:bg-green-50:hover {
+  background-color: #333333 !important;
+}
+
+.scheme-high-contrast .border-green-700 {
+  border-color: #ffff00 !important;
+}
+
+.scheme-high-contrast .from-green-700 {
+  --tw-gradient-from: #ffff00 !important;
+}
+
+.scheme-high-contrast .to-green-600 {
+  --tw-gradient-to: #cccc00 !important;
+}
+
+.scheme-high-contrast .border-gray-200 {
+  border-color: #ffffff !important;
+}
+
+.scheme-high-contrast .hover\:bg-gray-100:hover {
+  background-color: #333333 !important;
+}
+
+/* Footer adjustments for schemes */
+.scheme-protanopia footer.bg-green-700 {
+  background-color: #1e40af !important;
+}
+
+.scheme-protanopia footer .text-white\/80 {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.scheme-protanopia footer .border-white\/20 {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.scheme-deuteranopia footer.bg-green-700 {
+  background-color: #d97706 !important;
+}
+
+.scheme-deuteranopia footer .text-white\/80 {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.scheme-deuteranopia footer .border-white\/20 {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.scheme-tritanopia footer.bg-green-700 {
+  background-color: #0891b2 !important;
+}
+
+.scheme-tritanopia footer .text-white\/80 {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.scheme-tritanopia footer .border-white\/20 {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.scheme-high-contrast footer.bg-green-700 {
+  background-color: #ffff00 !important;
+  color: #000000 !important;
+}
+
+.scheme-high-contrast footer .text-white {
+  color: #000000 !important;
+}
+
+.scheme-high-contrast footer .text-white\/80 {
+  color: rgba(0, 0, 0, 0.8) !important;
+}
+
+.scheme-high-contrast footer .border-white\/20 {
+  border-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+.scheme-high-contrast footer a:hover {
+  color: #000000 !important;
+  text-decoration: underline;
+}
